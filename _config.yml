@@ -16,9 +16,38 @@ recaptcha_enabled: true
 
 # Build settings
 markdown: kramdown
-theme: minima
+# Use Minimal Mistakes as a remote theme (works with GitHub Pages via jekyll-remote-theme)
+remote_theme: "mmistakes/minimal-mistakes"
 plugins:
+  - jekyll-remote-theme
   - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Repository (helpful for canonical URLs and GitHub Pages)
+repository: vanhoutenbos/personal-website
+
+# Public site URL (project pages normally live under /<repo>)
+url: "https://vanhoutenbos.github.io/personal-website"
+
+# Author / SEO defaults
+author:
+  name: "Jean-Paul van Houten - Bos"
+  email: formspree.io@vanhoutensolutions.nl
+  url: "https://vanhoutenbos.github.io/personal-website"
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+      lang: "nl"
+
+# Default social image (place an image in assets/img/ if you add one)
+image: "/assets/img/social-default.png"
+
+# Locale
+locale: "nl_NL"
 
 # Exclude files from the build
 exclude:
