@@ -124,6 +124,12 @@ body {
   margin-bottom: 2rem;
 }
 
+/* Portfolio section visual distinction */
+.portfolio-section {
+  background-color: #f3f6f8; /* slightly different than main background */
+  padding: 2.5rem;
+}
+
 .content-section h2 {
   color: var(--text-color);
   margin-bottom: 1rem;
@@ -163,14 +169,17 @@ body {
 .portfolio-item {
   background-color: var(--bg-white);
   border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  padding: 1.75rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  margin-bottom: 1.75rem; /* spacing between items */
 }
 
 .portfolio-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 .portfolio-item h3 {
