@@ -9,6 +9,7 @@ url: "https://vanhoutenbos.github.io"
 # Social links
 github: "https://github.com/vanhoutenbos/"
 linkedin: "https://www.linkedin.com/in/%F0%9F%92%BB-jean-paul-van-houten-bos-9254977a/"
+stackoverflow: "https://stackoverflow.com/users/2604342/jean-paul"
 
 # CAPTCHA removed: site will use honeypot + timestamp fallback instead of reCAPTCHA
 # recaptcha_site_key and recaptcha_enabled removed per user request
