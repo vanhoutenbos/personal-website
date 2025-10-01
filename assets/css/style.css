@@ -6,12 +6,13 @@
 }
 
 :root {
-  --primary-color: #0a84ff; /* Accent color - professional blue */
+  --primary-color: #f47c1c; /* Accent color - user provided */
+  --secondary-color: #0a84ff; /* Secondary/provide contrast */
   --text-color: #333;
   --bg-light: #f8f9fa;
   --bg-white: #ffffff;
   --border-color: #e1e4e8;
-  --hover-color: #2980b9;
+  --hover-color: #c85b12;
 }
 
 body {
@@ -87,6 +88,10 @@ body {
   font-size: 3rem;
   margin-bottom: 1rem;
   color: var(--text-color);
+}
+
+.hero h1, .content-section h2, .portfolio-item h3 {
+  font-family: 'Merriweather', serif;
 }
 
 .hero p {
