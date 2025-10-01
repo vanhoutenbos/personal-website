@@ -6,12 +6,22 @@ title: Blog
 <div class="container">
   <section class="content-section">
     <h2>Blog</h2>
-    <p>Welkom op mijn blog! Deze sectie is in ontwikkeling. Binnenkort deel ik artikelen, tutorials en inzichten over cloudmigraties, Kubernetes, observability en CI/CD.</p>
-    <p>Bekijk intussen mijn <a href="{{ '/portfolio.html' | relative_url }}">portfolio</a> of <a href="{{ '/contact.html' | relative_url }}">neem contact op</a> voor vragen of opdrachten.</p>
+    <p>Hier vind je mijn artikelen en korte posts. Onderstaande lijst bevat de meest recente publicaties.</p>
   </section>
 
   <section class="content-section">
-    <h2>Plannen</h2>
-    <p>Ik wil schrijven over praktische migratiestrategieën, Kubernetes-best practices en lessons learned uit grote migraties. Heb je een onderwerp dat je graag ziet? Laat het weten via het contactformulier.</p>
+    <h2>Recente posts</h2>
+    <div class="posts-list">
+      {% for post in site.posts %}
+      <article class="post-item">
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <p class="post-meta">{{ post.date | date: "%-d %B %Y" }}{% if post.tags %} — {{ post.tags | array_to_sentence_string }}{% endif %}</p>
+        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+        <p><a href="{{ post.url | relative_url }}" class="btn">Lees verder</a></p>
+      </article>
+      {% else %}
+      <p>Er zijn nog geen posts gepubliceerd.</p>
+      {% endfor %}
+    </div>
   </section>
 </div>
