@@ -9,19 +9,43 @@ title: Blog
     <p>Hier vind je mijn artikelen en korte posts. Onderstaande lijst bevat de meest recente publicaties.</p>
   </section>
 
+  {%- comment -%}
+  Zoek een specifieke AI-post en toon die als featured bovenaan (als aanwezig).
+  We zoeken op de URL-fragment 'ai-made-portfolio' — als je andere slug gebruikt, pas dit aan.
+  {%- endcomment -%}
+  {% assign featured_posts = site.posts | where_exp: "p", "p.url contains 'ai-made-portfolio'" %}
+  {% assign featured = featured_posts | first %}
+
+  {% if featured %}
+  <section class="content-section featured-post">
+    <h2>Uitgelicht: {{ featured.title }}</h2>
+    <article class="post-item featured">
+      <h3><a href="{{ featured.url | relative_url }}">{{ featured.title }}</a></h3>
+      <p class="post-meta">{{ featured.date | date: "%-d %B %Y" }}{% if featured.tags %} — {{ featured.tags | array_to_sentence_string }}{% endif %}</p>
+      <p class="post-excerpt">{{ featured.excerpt | strip_html | truncate: 400 }}</p>
+      <p><a href="{{ featured.url | relative_url }}" class="btn">Lees het artikel</a></p>
+    </article>
+  </section>
+  {% endif %}
+
   <section class="content-section">
-    <h2>Recente posts</h2>
+    <h2>Alle posts</h2>
     <div class="posts-list">
-      {% for post in site.posts %}
-      <article class="post-item">
-        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-        <p class="post-meta">{{ post.date | date: "%-d %B %Y" }}{% if post.tags %} — {{ post.tags | array_to_sentence_string }}{% endif %}</p>
-        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
-        <p><a href="{{ post.url | relative_url }}" class="btn">Lees verder</a></p>
-      </article>
+      {% if site.posts == empty %}
+        <p>Er zijn nog geen posts gepubliceerd.</p>
       {% else %}
-      <p>Er zijn nog geen posts gepubliceerd.</p>
-      {% endfor %}
+        {% for post in site.posts %}
+          {% if featured and post.url == featured.url %}
+            {% continue %}
+          {% endif %}
+          <article class="post-item">
+            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+            <p class="post-meta">{{ post.date | date: "%-d %B %Y" }}{% if post.tags %} — {{ post.tags | array_to_sentence_string }}{% endif %}</p>
+            <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+            <p><a href="{{ post.url | relative_url }}" class="btn">Lees verder</a></p>
+          </article>
+        {% endfor %}
+      {% endif %}
     </div>
   </section>
 </div>
