@@ -10,9 +10,8 @@ url: "https://vanhoutenbos.github.io"
 github: "https://github.com/vanhoutenbos/"
 linkedin: "https://www.linkedin.com/in/%F0%9F%92%BB-jean-paul-van-houten-bos-9254977a/"
 
-# CAPTCHA (Google reCAPTCHA v2 checkbox)
-recaptcha_site_key: "6Lcc2NorAAAAAFhFFxh9X17eeAWtAM1M-Vk17jSF"
-recaptcha_enabled: true
+# CAPTCHA removed: site will use honeypot + timestamp fallback instead of reCAPTCHA
+# recaptcha_site_key and recaptcha_enabled removed per user request
 
 # Build settings
 markdown: kramdown

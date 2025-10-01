@@ -31,24 +31,13 @@ title: Contact
         <textarea id="message" name="message" required></textarea>
       </div>
 
-      {% if site.recaptcha_enabled and site.recaptcha_site_key != "" %}
-      <div class="form-group">
-        <!-- reCAPTCHA widget (Google reCAPTCHA v2) -->
-        <div class="g-recaptcha" data-sitekey="{{ site.recaptcha_site_key }}"></div>
-      </div>
-      {% endif %}
+      <!-- reCAPTCHA removed per user request; using honeypot + timestamp for anti-spam -->
 
       <button type="submit" class="btn">Verstuur bericht</button>
     </form>
   </section>
 
-    {% if site.recaptcha_enabled and site.recaptcha_site_key != "" %}
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script>window.recaptchaEnabled = true;</script>
-    {% else %}
-    <script>window.recaptchaEnabled = false;</script>
-    {% endif %}
-
+  <script>window.recaptchaEnabled = false;</script>
     <script>
       // Anti-spam: honeypot + time-check + optional reCAPTCHA client-side guard
       (function() {
@@ -87,15 +76,7 @@ title: Contact
             return false;
           }
 
-          // If reCAPTCHA is enabled, ensure widget has response
-          if (window.recaptchaEnabled && typeof grecaptcha !== 'undefined') {
-            var resp = grecaptcha.getResponse();
-            if (!resp || resp.length === 0) {
-              e.preventDefault();
-              alert('Bevestig alstublieft dat u geen robot bent (reCAPTCHA).');
-              return false;
-            }
-          }
+          // No server-side reCAPTCHA: rely on honeypot + timestamp as fallback
         });
       })();
     </script>
