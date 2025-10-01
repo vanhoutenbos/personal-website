@@ -1,10 +1,18 @@
 # Site settings
 title: My Portfolio
-email: your-email@example.com
+email: formspree.io@vanhoutensolutions.nl
 description: >-
   A clean and modern portfolio website showcasing my work and projects.
 baseurl: ""
 url: "https://vanhoutenbos.github.io"
+
+# Social links
+github: "https://github.com/vanhoutenbos/"
+linkedin: "https://www.linkedin.com/in/%F0%9F%92%BB-jean-paul-van-houten-bos-9254977a/"
+
+# CAPTCHA (Google reCAPTCHA v2 checkbox)
+recaptcha_site_key: "6Lcc2NorAAAAAFhFFxh9X17eeAWtAM1M-Vk17jSF"
+recaptcha_enabled: true
 
 # Build settings
 markdown: kramdown

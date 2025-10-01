@@ -2,5 +2,17 @@
   <div class="container">
     <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
     <p>{{ site.description }}</p>
+    <p>
+      {% if site.email %}
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      {% endif %}
+      {% if site.github %}
+        &nbsp;|&nbsp; <a href="{{ site.github }}" target="_blank" rel="noopener">GitHub</a>
+      {% endif %}
+      {% if site.linkedin %}
+        &nbsp;|&nbsp; <a href="{{ site.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+      {% endif %}
+    </p>
+    <p style="font-size:0.9rem;color:#666;margin-top:0.5rem;">Deze site is gebouwd met behulp van AI-tools; tekst is gebaseerd op mijn CV en volledig gecontroleerd door Jean‑Paul van Houten.</p>
   </div>
 </footer>
