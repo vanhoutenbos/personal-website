@@ -48,27 +48,6 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
-      - name: Setup Node.js for Lighthouse
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Lighthouse CI and http-server
-        run: |
-          npm ci --no-audit --no-fund || true
-          npm install -g @lhci/cli http-server
-
-      - name: Run Lighthouse CI against built site
-        run: |
-          # Serve the built site and run LHCI against it
-          nohup http-server ./_site -p 8080 >/dev/null 2>&1 &
-          npx lhci autorun --collect.url=http://127.0.0.1:8080 --upload.target=filesystem --upload.outputDir=./lhci-report || true
-
-      - name: Upload Lighthouse report
-        uses: actions/upload-artifact@v4
-        with:
-          name: lhci-report
-          path: ./lhci-report
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
