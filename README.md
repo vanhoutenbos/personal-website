@@ -54,7 +54,7 @@ This site is configured for GitHub Pages deployment. Simply push to the main bra
 ## Customization
 
 - Edit `_config.yml` to update site title, description, and URL
-- Modify `assets/css/style.css` to change colors and styles
+- Modify `assets/css/custom.scss` to change colors and styles
 - Update page content in the HTML files
 - Add blog posts to `_posts/` directory using format: `YYYY-MM-DD-title.md`
 

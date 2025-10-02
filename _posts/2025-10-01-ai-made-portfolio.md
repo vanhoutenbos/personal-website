@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: single
 title: "Hoe ik deze blog en portfolio met AI heb opgebouwd"
 date: 2025-10-01 10:00:00 +0100
 image: /assets/img/post-default.svg
 image_alt: "AI en portfolio overzicht"
+categories: [blog]
 toc: true
 tags: [ai, portfolio, jekyll]
 excerpt: "Ontdek hoe ik mijn portfolio en blog met AI heb opgezet: van teksten en ideeën tot workflow, validatie en ethische keuzes. Een praktisch voorbeeld voor developers en contentmakers."

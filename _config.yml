@@ -23,6 +23,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-include-cache
 
 # Repository (helpful for canonical URLs and GitHub Pages)
 repository: vanhoutenbos/personal-website
