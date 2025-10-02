@@ -33,6 +33,7 @@ url: "https://vanhoutenbos.github.io/personal-website"
 # Author / SEO defaults
 author:
   name: "Jean-Paul van Houten - Bos"
+  email: formspree.io@vanhoutensolutions.nl
   url: "https://vanhoutenbos.github.io/personal-website"
 defaults:
   - scope:
