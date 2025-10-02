@@ -3,8 +3,8 @@ title: Jean-Paul van Houten - Bos Portfolio
 email: formspree.io@vanhoutensolutions.nl
 description: >-
   A simpele maar moderne website over Jean-Paul van Houten - Bos en zijn projecten.
-baseurl: ""
-url: "https://vanhoutenbos.github.io"
+baseurl: "" # empty because we are using a custom root (or www) domain
+url: "https://www.jeanpaulvanhouten.nl" # public canonical site URL
 
 # Social links
 github: "https://github.com/vanhoutenbos/"
@@ -28,14 +28,13 @@ plugins:
 # Repository (helpful for canonical URLs and GitHub Pages)
 repository: vanhoutenbos/personal-website
 
-# Public site URL (project pages normally live under /<repo>)
-url: "https://vanhoutenbos.github.io/personal-website"
+# (removed duplicate url; full canonical becomes url+baseurl)
 
 # Author / SEO defaults
 author:
   name: "Jean-Paul van Houten - Bos"
   email: formspree.io@vanhoutensolutions.nl
-  url: "https://vanhoutenbos.github.io/personal-website"
+  url: "https://www.jeanpaulvanhouten.nl"
 defaults:
   - scope:
       path: ""
