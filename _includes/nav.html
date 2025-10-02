@@ -3,10 +3,10 @@
     <a href="{{ '/' | relative_url }}" class="logo">{{ site.title }}</a>
     <ul class="nav-links">
       <li><a href="{{ '/' | relative_url }}" {% if page.url == "/" %}class="active"{% endif %}>Home</a></li>
-      <li><a href="{{ '/about.html' | relative_url }}" {% if page.url == "/about.html" %}class="active"{% endif %}>Over mij</a></li>
-      <li><a href="{{ '/portfolio.html' | relative_url }}" {% if page.url == "/portfolio.html" %}class="active"{% endif %}>Mijn werk</a></li>
-      <li><a href="{{ '/blog.html' | relative_url }}" {% if page.url == "/blog.html" %}class="active"{% endif %}>Blog</a></li>
-      <li><a href="{{ '/contact.html' | relative_url }}" {% if page.url == "/contact.html" %}class="active"{% endif %}>Contact</a></li>
+  <li><a href="{{ '/about/' | relative_url }}" {% if page.url == "/about/" %}class="active"{% endif %}>Over mij</a></li>
+  <li><a href="{{ '/portfolio/' | relative_url }}" {% if page.url == "/portfolio/" %}class="active"{% endif %}>Mijn werk</a></li>
+  <li><a href="{{ '/blog/' | relative_url }}" {% if page.url == "/blog/" %}class="active"{% endif %}>Blog</a></li>
+  <li><a href="{{ '/contact/' | relative_url }}" {% if page.url == "/contact/" %}class="active"{% endif %}>Contact</a></li>
     </ul>
   </div>
 </nav>

@@ -25,6 +25,12 @@ plugins:
   - jekyll-sitemap
   - jekyll-include-cache
 
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: "/:name/"
+
 # Repository (helpful for canonical URLs and GitHub Pages)
 repository: vanhoutenbos/personal-website
 
