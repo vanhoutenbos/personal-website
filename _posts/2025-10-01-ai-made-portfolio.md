@@ -4,24 +4,13 @@ title: "Hoe ik deze blog en portfolio met AI heb opgebouwd"
 date: 2025-10-01 10:00:00 +0100
 image: /assets/img/post-default.svg
 image_alt: "AI en portfolio overzicht"
+toc: true
 tags: [ai, portfolio, jekyll]
 excerpt: "Ontdek hoe ik mijn portfolio en blog met AI heb opgezet: van teksten en ideeën tot workflow, validatie en ethische keuzes. Een praktisch voorbeeld voor developers en contentmakers."
 ---
 
-# Hoe ik deze blog en portfolio met AI heb opgebouwd
-
+# Intro
 AI-tools veranderen hoe we websites en content creëren. In dit artikel leg ik uit hoe ik mijn **portfolio en blogsite met AI en Jekyll heb gebouwd**, welke teksten ik heb laten genereren, hoe ik kwaliteit borgde en welke technische en ethische keuzes ik maakte.
-
----
-
-## Inhoudsopgave
-- [Waarom ik AI gebruikte voor deze site](#waarom-ik-ai-gebruikte-voor-deze-site)
-- [Wat ik door AI heb laten genereren](#wat-ik-door-ai-heb-laten-genereren)
-- [Hoe ik AI combineerde met handmatige validatie](#hoe-ik-ai-combineerde-met-handmatige-validatie)
-- [Technische workflow: tools en prompts](#technische-workflow-tools-en-prompts)
-- [Ethische en kwaliteitsoverwegingen](#ethische-en-kwaliteitsoverwegingen)
-- [Conclusie: waarom AI handig is voor portfolio's](#conclusie-waarom-ai-handig-is-voor-portfolios)
-- [FAQ](#faq)
 
 ---
 

@@ -33,7 +33,6 @@ url: "https://vanhoutenbos.github.io/personal-website"
 # Author / SEO defaults
 author:
   name: "Jean-Paul van Houten - Bos"
-  email: formspree.io@vanhoutensolutions.nl
   url: "https://vanhoutenbos.github.io/personal-website"
 defaults:
   - scope:
@@ -42,6 +41,17 @@ defaults:
     values:
       layout: "default"
       lang: "nl"
+  
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
 
 # Default social image (place an image in assets/img/ if you add one)
 image: "/assets/img/social-default.png"
