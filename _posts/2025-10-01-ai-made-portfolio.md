@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: default
 title: "Hoe ik deze blog en portfolio met AI heb opgebouwd"
 date: 2025-10-01 10:00:00 +0100
 image: /assets/img/post-default.svg
