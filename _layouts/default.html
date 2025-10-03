@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
-  {% include nav %}
+  {% include nav.html %}
   {% comment %} Availability banner: shows sitewide that Jean‑Paul is not available for permanent positions; only via Rubicon {% endcomment %}
   <div class="availability-banner">Niet beschikbaar voor vaste aanstelling — alleen inzetbaar via Rubicon. Neem contact met mij als je geintresseerd bent.</div>
   
@@ -20,6 +20,6 @@
     {{ content }}
   </main>
   
-  {% include footer %}
+  {% include footer.html %}
 </body>
 </html>
