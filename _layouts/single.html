@@ -10,9 +10,8 @@ layout: default
         <p class="post-meta">{{ page.date | date: "%-d %B %Y" }}{% if page.tags %} — {{ page.tags | array_to_sentence_string }}{% endif %}</p>
 
         {% if page.image %}
-        <figure class="featured-image">
-          <img src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: page.title }}">
-          {% if page.image_credit %}<figcaption class="img-credit">{{ page.image_credit }}</figcaption>{% endif %}
+        <figure class="featured-image" style="margin: 2rem auto; max-width: 90%; display: flex; justify-content: center; align-items: center;">
+          <img src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: page.title }}" style="width:100%; height:auto; max-width:900px; border-radius:8px; box-shadow:0 4px 24px rgba(0,0,0,0.08); object-fit:cover; display:block;" />
         </figure>
         {% endif %}
       </header>

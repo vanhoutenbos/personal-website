@@ -1,6 +1,19 @@
 ---
 ---
-/* Minimal overrides only */
-.availability-banner { background:#fff5ef; color:#222; padding:0.5rem 1rem; text-align:center; font-weight:700; border-bottom:1px solid rgba(0,0,0,0.05); }
-.featured-image img { width:100%; height:320px; object-fit:cover; border-radius:6px; }
-.toc { margin-bottom:1rem; }
+
+/* Verbeterde spacing tussen headings en lists */
+h1 + ul, h1 + ol,
+h2 + ul, h2 + ol,
+h3 + ul, h3 + ol,
+h4 + ul, h4 + ol {
+	margin-top: 1.2em;
+}
+
+ul, ol {
+	margin-bottom: 1.2em;
+}
+
+/* Iets meer ruimte onder headings */
+h1, h2, h3, h4 {
+	margin-bottom: 0.5em;
+}
