@@ -54,7 +54,7 @@ Het resultaat: teksten die vlot en consistent zijn, maar volledig door mij gever
   4. Commit, push en test op GitHub Pages.
 
 **Voorbeeldprompt**:  
-*"Herschrijf het volgende CV-segment tot een zakelijke, toegankelijke Nederlandse 'About'-paragraaf (120–160 woorden). Benadruk DevOps, Kubernetes en teamtraining."*
+> *"Herschrijf het volgende CV-segment tot een zakelijke, toegankelijke Nederlandse 'About'-paragraaf (120–160 woorden). Benadruk DevOps, Kubernetes en teamtraining."*
 
 ## Ethische en kwaliteitsoverwegingen
 
