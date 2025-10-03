@@ -1,0 +1,11 @@
+main:
+  - title: "Home"
+    url: "/"
+  - title: "Over mij"
+    url: "/about/"
+  - title: "Mijn werk"
+    url: "/portfolio/"
+  - title: "Blog"
+    url: "/blog/"
+  - title: "Contact"
+    url: "/contact/"
