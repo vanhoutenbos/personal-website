@@ -107,6 +107,27 @@ body {
   background-color: var(--bg-white);
   border-radius: 8px;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-inner {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-image {
+  flex: 0 0 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero h1 {
@@ -283,14 +304,23 @@ body {
     gap: 1rem;
   }
   
+  .hero {
+    padding: 2rem 0;
+  }
+  .hero-inner {
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+  .hero-image {
+    margin: 0 auto;
+  }
   .hero h1 {
     font-size: 2rem;
   }
-  
   .hero p {
     font-size: 1rem;
   }
-  
   .portfolio-grid {
     grid-template-columns: 1fr;
   }

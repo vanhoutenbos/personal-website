@@ -26,10 +26,9 @@ lang: nl
 - Concrete situaties waarin het onderwerp een verschil maakte
 - Codevoorbeelden of concrete tips
 - Lessons learned: wat ging goed, wat ging fout
-
-## 4. Fouten & Learnings
-- Transparant over fouten die ik heb gemaakt
-- Hoe ik deze heb opgelost
+## 4. Fouten & Learning
+- Transparant over fouten die ik heb gemaak
+- Hoe ik deze heb opgelos
 - Tips voor anderen
 
 ## 5. Afsluiting
