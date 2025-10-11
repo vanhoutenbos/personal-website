@@ -15,14 +15,7 @@ Your website now has a complete analytics and SEO toolkit ready to go!
   - Secure cookie handling
   - Conditional loading (won't load until configured)
 
-#### 2. Google Search Console Integration
-- **File**: `_includes/analytics.html`
-- **Status**: Ready to activate (needs configuration)
-- **Features**:
-  - Meta tag verification
-  - Conditional loading
-
-#### 3. robots.txt
+#### 2. robots.txt
 - **File**: `/robots.txt`
 - **Status**: ✅ Active immediately
 - **Features**:
@@ -31,7 +24,7 @@ Your website now has a complete analytics and SEO toolkit ready to go!
   - References sitemap.xml
   - Blocks draft content from indexing
 
-#### 4. llm.txt
+#### 3. llm.txt
 - **File**: `/llm.txt`
 - **Status**: ✅ Active immediately
 - **Features**:
@@ -41,7 +34,7 @@ Your website now has a complete analytics and SEO toolkit ready to go!
   - Contact information
   - Site structure
 
-#### 5. Analytics Include
+#### 4. Analytics Include
 - **File**: `_includes/analytics.html`
 - **Integrated in**: `_layouts/default.html`
 - **Status**: ✅ Active (conditional on configuration)
@@ -84,42 +77,34 @@ Your website now has a complete analytics and SEO toolkit ready to go!
    - Quick setup reference
    - Links to detailed docs
 
-## 🚀 How to Activate (5-10 minutes)
+## 🚀 How to Activate (5 minutes)
 
-### Step 1: Get Your Codes
+### Step 1: Get Your Code
 
 **Google Analytics 4:**
 1. Go to https://analytics.google.com
 2. Create a GA4 property
 3. Copy your Measurement ID (format: `G-XXXXXXXXXX`)
 
-**Google Search Console:**
-1. Go to https://search.google.com/search-console
-2. Add your property
-3. Choose "HTML tag" verification
-4. Copy only the `content` value
-
 ### Step 2: Configure
 
-Add these two lines to `_config.yml`:
+Add this line to `_config.yml`:
 
 ```yaml
 google_analytics_id: "G-XXXXXXXXXX"
-google_site_verification: "your_verification_code"
 ```
 
 ### Step 3: Deploy
 
 ```bash
 git add _config.yml
-git commit -m "Configure Google Analytics and Search Console"
+git commit -m "Configure Google Analytics"
 git push
 ```
 
 ### Step 4: Verify (after 2-5 minutes)
 
 - ✅ Visit your site and check page source for analytics code
-- ✅ Verify Google Search Console property
 - ✅ Submit sitemap: `https://www.jeanpaulvanhouten.nl/sitemap.xml`
 - ✅ Check Google Analytics Real-time report
 
@@ -130,7 +115,6 @@ git push
 | Tool | What It Does | Active Now? | Config Needed? |
 |------|--------------|-------------|----------------|
 | Google Analytics | Tracks visitors, behavior, traffic sources | No | Yes ⚙️ |
-| Google Search Console | Monitors search performance, indexing | No | Yes ⚙️ |
 | robots.txt | Controls crawler access | ✅ Yes | No |
 | llm.txt | Provides info to AI crawlers | ✅ Yes | No |
 | Sitemap | Lists all pages for search engines | ✅ Yes | No (auto) |
@@ -160,7 +144,7 @@ The implementation is privacy-respecting:
 
 ## 📈 Recommended Next Steps
 
-1. **Today**: Set up Google Analytics and Search Console (10 min)
+1. **Today**: Set up Google Analytics (5 min)
 2. **This week**: Review analytics, submit sitemap, check indexing
 3. **This month**: Add Microsoft Clarity for heatmaps (5 min)
 4. **Future**: Consider additional tools from recommendations doc
@@ -190,4 +174,4 @@ The implementation is privacy-respecting:
 
 ---
 
-**You're all set!** Follow `docs/SETUP-CHECKLIST.md` to activate your analytics in less than 10 minutes. 🚀
+**You're all set!** Follow `docs/SETUP-CHECKLIST.md` to activate your analytics in less than 5 minutes. 🚀

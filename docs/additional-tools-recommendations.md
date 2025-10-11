@@ -7,13 +7,12 @@ This document provides recommendations for additional tools you could consider a
 You already have these excellent tools in place:
 
 1. **Google Analytics 4** - Comprehensive visitor analytics
-2. **Google Search Console** - Search performance monitoring
-3. **jekyll-seo-tag** - Automatic SEO meta tags
-4. **jekyll-sitemap** - Automatic sitemap generation
-5. **jekyll-feed** - RSS feed for blog posts
-6. **robots.txt** - Crawler control
-7. **llm.txt** - AI crawler information
-8. **JSON-LD structured data** - Person schema for rich results
+2. **jekyll-seo-tag** - Automatic SEO meta tags
+3. **jekyll-sitemap** - Automatic sitemap generation
+4. **jekyll-feed** - RSS feed for blog posts
+5. **robots.txt** - Crawler control
+6. **llm.txt** - AI crawler information
+7. **JSON-LD structured data** - Person schema for rich results
 
 ## Recommended Next Steps 🎯
 
@@ -46,8 +45,7 @@ You already have these excellent tools in place:
 
 **Setup**:
 - Sign up at https://www.bing.com/webmasters
-- Can import data from Google Search Console
-- Add verification meta tag (similar to Google)
+- Add verification meta tag or verify via DNS
 
 **Effort**: 5 minutes
 
@@ -191,12 +189,12 @@ If you want an alternative to Google Analytics:
 ## Implementation Priority Guide
 
 ### If you have 1 hour:
-1. Set up Google Analytics and Search Console (already prepared)
+1. Set up Google Analytics (already prepared)
 2. Add Microsoft Clarity
 
 ### If you have 4 hours:
 1. All of the above
-2. Set up Bing Webmaster Tools
+2. Set up Bing Webmaster Tools (via DNS)
 3. Add WebSite structured data schema
 
 ### If you have 1 day:
@@ -217,7 +215,6 @@ If you want an alternative to Google Analytics:
 | Tool | Cost | Setup Time | Privacy | Value |
 |------|------|------------|---------|-------|
 | Google Analytics 4 | Free | 5 min | Medium | High ✅ |
-| Google Search Console | Free | 5 min | Good | High ✅ |
 | Microsoft Clarity | Free | 5 min | Good | High ✅ |
 | Bing Webmaster | Free | 5 min | Good | Medium |
 | Plausible | $9/mo | 30 min | Excellent | Medium |
@@ -228,7 +225,7 @@ If you want an alternative to Google Analytics:
 ## Conclusion
 
 **Recommended immediate additions:**
-1. ✅ Google Analytics & Search Console (already done!)
+1. ✅ Google Analytics (already done!)
 2. ⭐ Microsoft Clarity - Free heatmaps
 3. ⭐ Bing Webmaster Tools - Broader search coverage
 
@@ -242,7 +239,7 @@ If you want an alternative to Google Analytics:
 - Error tracking (only if you have complex JS)
 - Performance monitoring (only if having issues)
 
-The tools already implemented give you excellent coverage for analytics and SEO. Focus on getting value from Google Analytics and Search Console before adding more tools.
+The tools already implemented give you excellent coverage for analytics and SEO. Focus on getting value from Google Analytics before adding more tools.
 
 ## Questions?
 

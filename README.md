@@ -9,7 +9,7 @@ A clean and modern portfolio website built with Jekyll for GitHub Pages.
 - **Portfolio Focus**: Showcases projects and work effectively
 - **Easy to Customize**: Simple structure with organized files
 - **SEO Optimized**: Includes sitemap, robots.txt, structured data, and llm.txt
-- **Analytics Ready**: Google Analytics 4 and Search Console integration built-in
+- **Analytics Ready**: Google Analytics 4 integration built-in
 
 ## Pages
 
@@ -62,20 +62,17 @@ This site is configured for GitHub Pages deployment. Simply push to the main bra
 
 ## Analytics and SEO Setup
 
-The site is ready for Google Analytics and Search Console integration. See [docs/analytics-seo-setup.md](docs/analytics-seo-setup.md) for detailed setup instructions.
+The site is ready for Google Analytics integration. See [docs/analytics-seo-setup.md](docs/analytics-seo-setup.md) for detailed setup instructions.
 
 **Quick setup**:
 1. Get your Google Analytics 4 Measurement ID from https://analytics.google.com
-2. Get your Google Search Console verification code from https://search.google.com/search-console
-3. Add to `_config.yml`:
+2. Add to `_config.yml`:
    ```yaml
    google_analytics_id: "G-XXXXXXXXXX"
-   google_site_verification: "your_verification_code"
    ```
 
 **What's included**:
 - ✅ Google Analytics 4 integration
-- ✅ Google Search Console verification
 - ✅ robots.txt for search engine crawlers
 - ✅ llm.txt for AI/LLM crawlers
 - ✅ Automatic sitemap generation (jekyll-sitemap)
