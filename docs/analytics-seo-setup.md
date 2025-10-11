@@ -28,32 +28,7 @@ This document explains the analytics and SEO tools that have been added to the w
 - Track conversion goals and events
 - Analyze traffic sources
 
-### 2. Google Search Console
-**Purpose**: Monitor search performance, indexing status, and SEO health.
-
-**Features implemented**:
-- Meta tag verification in site header
-- Conditional loading (only when configured)
-
-**How to set up**:
-1. Go to https://search.google.com/search-console
-2. Add property for `https://www.jeanpaulvanhouten.nl`
-3. Choose "HTML tag" verification method
-4. Copy the `content` value from the meta tag (not the entire tag)
-5. Add to `_config.yml`:
-   ```yaml
-   google_site_verification: "your_verification_code_here"
-   ```
-
-**Benefits**:
-- Monitor search rankings and click-through rates
-- Submit sitemaps for better indexing
-- Identify and fix crawl errors
-- See which search queries lead to your site
-- Get alerts about security or indexing issues
-- Request re-indexing of updated pages
-
-### 3. robots.txt
+### 2. robots.txt
 **Purpose**: Control how search engines and AI crawlers access your site.
 
 **Location**: `/robots.txt` (root of the site)
@@ -72,7 +47,7 @@ This document explains the analytics and SEO tools that have been added to the w
 - Prevent indexing of draft or private content
 - Allow AI tools to access content for better discovery
 
-### 4. llm.txt
+### 3. llm.txt
 **Purpose**: Provide structured information for AI and LLM crawlers.
 
 **Location**: `/llm.txt` (root of the site)
@@ -92,7 +67,7 @@ This document explains the analytics and SEO tools that have been added to the w
 - Provide context for AI-generated summaries
 - Control the narrative around your professional profile
 
-### 5. Existing SEO Tools (Already Configured)
+### 4. Existing SEO Tools (Already Configured)
 
 #### jekyll-seo-tag
 - Automatic meta tags for social sharing
@@ -117,30 +92,18 @@ This document explains the analytics and SEO tools that have been added to the w
    - Create a GA4 property
    - Copy your Measurement ID (G-XXXXXXXXXX)
 
-2. **Get Google Search Console verification**:
-   - Visit https://search.google.com/search-console
-   - Add your property
-   - Choose HTML tag method
-   - Copy just the `content` value
-
-3. **Update _config.yml**:
+2. **Update _config.yml**:
    ```yaml
-   # Add these lines to _config.yml
+   # Add this line to _config.yml
    google_analytics_id: "G-XXXXXXXXXX"  # Replace with your actual ID
-   google_site_verification: "your_verification_code"  # Replace with your code
    ```
 
-4. **Commit and deploy**:
+3. **Commit and deploy**:
    ```bash
    git add _config.yml
-   git commit -m "Configure Google Analytics and Search Console"
+   git commit -m "Configure Google Analytics"
    git push
    ```
-
-5. **Verify in Google Search Console**:
-   - Wait a few minutes for the site to deploy
-   - Click "Verify" in Google Search Console
-   - Submit your sitemap: `https://www.jeanpaulvanhouten.nl/sitemap.xml`
 
 ## Privacy Considerations
 
@@ -159,12 +122,6 @@ You may want to add a cookie consent banner or privacy policy page to comply wit
 2. Deploy the site
 3. Visit your website
 4. Check Google Analytics real-time reports (appears within minutes)
-
-### Test Google Search Console
-1. Add verification code to `_config.yml`
-2. Deploy the site
-3. Click "Verify" in Search Console
-4. Submit sitemap at: `https://www.jeanpaulvanhouten.nl/sitemap.xml`
 
 ### Test robots.txt
 Visit: https://www.jeanpaulvanhouten.nl/robots.txt
@@ -188,19 +145,13 @@ Should display an XML sitemap of all pages (generated automatically by jekyll-si
    - Add measurement ID to config
    - Configure goals and events
 
-2. **Set up Google Search Console**:
-   - Verify ownership
-   - Submit sitemap
-   - Monitor for issues weekly
-
-3. **Consider adding**:
+2. **Consider adding**:
    - Privacy policy page
    - Cookie consent banner (if needed for GDPR)
    - Additional structured data (e.g., Organization, WebSite schemas)
 
-4. **Monitor regularly**:
+3. **Monitor regularly**:
    - Check Google Analytics weekly for traffic insights
-   - Review Search Console monthly for SEO issues
    - Update llm.txt when adding major achievements
 
 ## Additional Tools to Consider (Optional)
@@ -222,7 +173,6 @@ Should display an XML sitemap of all pages (generated automatically by jekyll-si
 ## Support and Resources
 
 - Google Analytics Help: https://support.google.com/analytics
-- Google Search Console Help: https://support.google.com/webmasters
 - llm.txt specification: https://llmstxt.org/
 - Jekyll SEO documentation: https://github.com/jekyll/jekyll-seo-tag
 
