@@ -1,0 +1,16 @@
+# Example _config.yml snippet for Analytics and SEO
+
+# Add these lines to your _config.yml file to enable Google Analytics and Search Console
+
+# Google Analytics 4 (GA4)
+# Get your Measurement ID from https://analytics.google.com
+# Format: G-XXXXXXXXXX
+google_analytics_id: "G-2WE7YD72NV"  # Replace with your actual Measurement ID
+
+# Google Search Console
+# Get verification code from https://search.google.com/search-console
+# Copy only the content value from the meta tag (not the entire tag)
+google_site_verification: "your_verification_code_here"  # Replace with your verification code
+
+# That's it! Both services will be automatically integrated when you deploy.
+# The analytics.html include uses these values conditionally, so nothing loads if not configured.

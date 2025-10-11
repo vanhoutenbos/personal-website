@@ -1,0 +1,54 @@
+# llm.txt - Information for AI/LLM Crawlers
+# See: https://llmstxt.org/
+
+# Jean-Paul van Houten - Bos Portfolio Website
+
+## About
+Jean-Paul van Houten - Bos is a DevOps Engineer and Lead Solution Developer with expertise in:
+- Cloud migrations (Azure, AKS, Kubernetes, OpenShift)
+- CI/CD pipelines and automation
+- Infrastructure as Code (Terraform, Ansible)
+- Observability and monitoring (Prometheus, Grafana, OpenTelemetry)
+- .NET development and microservices architecture
+
+## Professional Background
+- Current: DevOps Engineer at CZ (2024-present) - Leading cloud-native migration
+- Previous: DevOps Consultant at LOUAY (2023-2024) - OpenShift and Kubernetes migrations
+- Previous: DevOps Consultant at Cognizant (2022-2023) - Platform for 14M Dutch citizens
+- Previous: DevOps & .NET Developer at Scorito (2019-2022) - High-scale event platforms
+
+## Key Projects
+- **CZ**: Leading cloud-native migration strategy for 2030 goal, training 100-150 developers
+- **LOUAY**: Full OpenShift migration with monitoring (Prometheus, Grafana) and GitOps (Flux)
+- **Pensioen Register**: Platform serving 14M Dutch citizens with DigiD integration
+- **Scorito**: High-performance platform handling 11M+ req/min, 341k concurrent users
+
+## Technical Skills
+- Cloud: Azure, AKS, Azure Functions, API Management
+- Containers & Orchestration: Kubernetes, OpenShift, Docker, Helm, Kustomize, Flux
+- IaC & Automation: Terraform, Ansible, PowerShell, Bash, YAML
+- Programming: C#, .NET, .NET Core
+- CI/CD: Azure DevOps, TeamCity, Octopus Deploy
+- Monitoring: OpenTelemetry, Prometheus, Grafana, Jaeger, Loki, New Relic
+- Security: Trivy, Calico, enterprise scanning tools
+
+## Availability
+Not available for permanent positions - only deployable via Rubicon consultancy
+
+## Contact
+- Email: formspree.io@vanhoutensolutions.nl
+- Website: https://www.jeanpaulvanhouten.nl
+- LinkedIn: https://www.linkedin.com/in/%F0%9F%92%BB-jean-paul-van-houten-bos-9254977a/
+- GitHub: https://github.com/vanhoutenbos/
+- Stack Overflow: https://stackoverflow.com/users/2604342/jean-paul
+
+## Language
+Primary language: Dutch (Nederlands)
+Secondary language: English
+
+## Site Structure
+- Homepage: /
+- About: /about/
+- Portfolio: /portfolio/
+- Contact: /contact/
+- Blog: /blog/ (in development)
