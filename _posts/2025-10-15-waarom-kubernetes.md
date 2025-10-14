@@ -1,13 +1,15 @@
 ---
 layout: single
 title: "Waarom kiezen zoveel developers voor Kubernetes?"
-date: 2025-10-15 10:00:00 +0100
-description: "Ontdek wanneer Kubernetes wel of niet de juiste keuze is voor jouw organisatie. Een praktische gids over schaalbaarheid, kostenbeheer en souvereiniteit, met persoonlijke ervaringen uit het veld."
+date: 2025-10-15 10:00:00 +0200
+description: "Ontdek wanneer Kubernetes wel of niet de juiste keuze is voor jouw organisatie. Een praktische gids over schaalbaarheid, kostenbeheer en soevereiniteit, met persoonlijke ervaringen uit het veld."
 image: /assets/img/post-default.svg
 image_alt: "Kubernetes container orchestration"
-categories: [blog]
+categories: [blog, kubernetes]
 toc: true
-tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, souvereiniteit]
+lang: nl
+excerpt: "Wanneer kies je wél of niet voor Kubernetes? Gids over schaalbaarheid, kostenbeheer en soevereiniteit met praktijkvoorbeelden."
+tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, soevereiniteit]
 ---
 
 # Waarom kiezen zoveel developers voor Kubernetes?
@@ -20,7 +22,7 @@ Na jaren ervaring met Kubernetes – van mijn eerste stappen met Docker Swarm to
 
 Kubernetes is een **container orchestration platform** dat oorspronkelijk binnen Google is ontstaan om hun schaalbaarheid-uitdagingen op te lossen. Het is uitgegroeid tot het de-facto platform voor het beheren van gecontaineriseerde applicaties – en dat niet zonder reden.
 
-Wat maakt Kubernetes zo bijzonder? Het is **platform-agnostisch** en **taal-onafhankelijk**. Of je nu PHP, C#, Python, Java of Go schrijft, of je draait een frontend, een API, een database of cron jobs – Kubernetes kan het allemaal orchestreren. Deze flexibiliteit, gecombineerd met **vendor-souvereiniteit** (je bent niet vast aan één cloudprovider), heeft ervoor gezorgd dat Kubernetes de nieuwe standaard is geworden, waar traditionele VM's ooit waren.
+Wat maakt Kubernetes zo bijzonder? Het is **platform-agnostisch** en **taal-onafhankelijk**. Of je nu PHP, C#, Python, Java of Go schrijft, of je draait een frontend, een API, een database of cron jobs – Kubernetes kan het allemaal orchestreren. Deze flexibiliteit, gecombineerd met **vendor-soevereiniteit** (je bent niet vast aan één cloudprovider), heeft ervoor gezorgd dat Kubernetes de nieuwe standaard is geworden, waar traditionele VM's ooit waren.
 
 ### Mijn eerste kennismaking
 
@@ -193,7 +195,7 @@ Of je nu kiest voor **Azure Kubernetes Service** voor pragmatisch gemak, **OpenS
 
 **Benieuwd of Kubernetes iets voor jouw organisatie is?** Ik help graag met architectuur-advies, migratie-strategieën of training voor je team. Neem contact op, en we bespreken wat de beste aanpak is voor jouw situatie.
 
-Later zal ik ook diepere dives publiceren over specifieke Kubernetes-onderwerpen – van netwerking tot security, van CI/CD tot monitoring. Stay tuned!
+Later zal ik ook diepere dives publiceren over specifieke Kubernetes-onderwerpen – van netwerken tot security, van CI/CD tot monitoring. Stay tuned!
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "[Jouw Blogtitel Hier]"
-date: [YYYY-MM-DD]
+## date: 2025-01-01 # Template placeholder removed to prevent Jekyll build errors
 excerpt: "[Korte samenvatting van de blog, max 160 tekens, met zoekwoorden]"
 categories: [onderwerp, praktijk, tips]
 tags: [tag1, tag2, tag3]
