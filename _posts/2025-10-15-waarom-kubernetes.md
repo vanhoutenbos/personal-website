@@ -1,10 +1,13 @@
 ---
+layout: single
 title: "Waarom kiezen zoveel developers voor Kubernetes?"
-date: 2025-10-15
-draft: false
-categories: [Kubernetes, Container Orchestration, Cloud Native, Schaalbaarheid]
-tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, souvereiniteit]
+date: 2025-10-15 10:00:00 +0100
 description: "Ontdek wanneer Kubernetes wel of niet de juiste keuze is voor jouw organisatie. Een praktische gids over schaalbaarheid, kostenbeheer en souvereiniteit, met persoonlijke ervaringen uit het veld."
+image: /assets/img/post-default.svg
+image_alt: "Kubernetes container orchestration"
+categories: [blog]
+toc: true
+tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, souvereiniteit]
 ---
 
 # Waarom kiezen zoveel developers voor Kubernetes?
