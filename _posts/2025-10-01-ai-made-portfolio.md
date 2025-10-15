@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Hoe ik deze blog en portfolio met AI heb opgebouwd"
+permalink: /blog/:year/:month/:day/:title.html
 date: 2025-10-01 10:00:00 +0100
 description: Lees hoe ik mijn portfolio en blog met AI en Jekyll heb opgezet. Van tekstgeneratie tot workflow, validatie en ethische keuzes. Een praktisch voorbeeld voor developers en contentmakers.
 image: /assets/img/post-default.svg

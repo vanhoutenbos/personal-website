@@ -1,0 +1,41 @@
+name: Preview site (including future posts)
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseurl:
+        description: "Optional baseurl override (usually keep empty)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          bundle config set path 'vendor/bundle'
+          bundle install --jobs 4 --retry 3
+
+      - name: Build Jekyll site (with future posts)
+        run: |
+          bundle exec jekyll build --baseurl "${{ github.event.inputs.baseurl }}" --future
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-preview
+          path: _site
+          if-no-files-found: error

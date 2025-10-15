@@ -1,7 +1,8 @@
 ---
 layout: single
 title: "Waarom kiezen zoveel developers voor Kubernetes?"
-date: 2025-10-15 10:00:00 +0200
+permalink: /blog/:year/:month/:day/:title.html
+date: 2025-10-15 06:00:00 +0200
 description: "Ontdek wanneer Kubernetes wel of niet de juiste keuze is voor jouw organisatie. Een praktische gids over schaalbaarheid, kostenbeheer en soevereiniteit, met persoonlijke ervaringen uit het veld."
 image: /assets/img/post-default.svg
 image_alt: "Kubernetes container orchestration"
@@ -50,7 +51,7 @@ Kubernetes lost dit op met **auto-scaling**: je platform schaalt automatisch op 
 
 Kubernetes is niet voor iedereen. Laten we eerlijk zijn over wanneer het wel en niet zinvol is.
 
-### ✅ Kubernetes is geschikt als:
+### Kubernetes is geschikt als:
 
 - **Je schaalbaarheid nodig hebt**: Je applicatie moet kunnen groeien van 10 naar 10.000 gebruikers zonder handmatige interventie
 - **Je multi-cloud of hybrid-cloud** strategieën overweegt: souvereiniteit en vendor-lock-in voorkomen zijn belangrijk
@@ -59,7 +60,7 @@ Kubernetes is niet voor iedereen. Laten we eerlijk zijn over wanneer het wel en 
 - **Je self-healing** belangrijk vindt: containers die automatisch herstarten bij crashes
 - **Kostenbeheer** essentieel is: betaal alleen voor wat je daadwerkelijk gebruikt
 
-### ❌ Kubernetes is overkill als:
+### Kubernetes is overkill als:
 
 - Je een **simpele website** hebt (zoals een CV-site of klein portfolio)
 - Je een **enkele applicatie** draait zonder schaalbaarheid-eisen

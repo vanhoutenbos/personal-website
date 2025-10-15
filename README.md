@@ -26,12 +26,15 @@ A clean and modern portfolio website built with Jekyll for GitHub Pages.
    bundle install
    ```
 
-2. Run the Jekyll server:
+
+2. Run de Jekyll server (inclusief drafts én geplande posts):
    ```bash
-   bundle exec jekyll serve
+   bundle exec jekyll serve --drafts --future
    ```
 
-3. Open your browser and visit `http://localhost:4000`
+3. Open je browser en bezoek `http://localhost:4000`
+
+Met deze optie zie je ook alle concepten uit `_drafts` en geplande posts in je lokale omgeving. De verborgen pagina `/preview/drafts/` toont een overzicht van alle concepten en geplande blogs.
 
 ## Deployment
 

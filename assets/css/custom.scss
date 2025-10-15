@@ -17,3 +17,12 @@ ul, ol {
 h1, h2, h3, h4 {
 	margin-bottom: 0.5em;
 }
+
+/* Extra spacing boven headings voor betere leesbaarheid */
+.page__content h2 {
+  margin-top: 2em !important;
+}
+
+.page__content h3 {
+  margin-top: 1.5em !important;
+}
