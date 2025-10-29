@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?"
+title: "Kubernetes Fundamentals - Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?"
 date: 2025-10-29
 excerpt: "Vergelijking van AKS, ACA, ACI en OpenShift: welke Kubernetes-oplossing past bij jouw team? Praktische tips, use cases en een heldere keuzehulp."
 categories: [Kubernetes, Keuzehulp]
@@ -10,7 +10,7 @@ canonical_url: "https://jeanpaulvanhouten.nl/blog/kubernetes-keuzehulp"
 tags: [kubernetes, AKS, OpenShift, containers, cloud native, soevereiniteit]
 ---
 
-# Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?
+# Kubernetes Fundamentals - Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?
 
 ## 1. Introductie
 Kubernetes is dé standaard voor container orchestration, maar Azure biedt meerdere smaken: AKS, ACA, ACI en OpenShift. In deze blog help ik je kiezen aan de hand van praktijkervaring, een vergelijkingstabel en concrete tips. 
