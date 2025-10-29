@@ -1,0 +1,4 @@
+- [Getting Started met AKS](/drafts/getting-started-aks)
+- [Microsoft Docs: Container Services](https://learn.microsoft.com/en-us/azure/containers/)
+- [Intercept: ACA vs AKS vs ACI](https://intercept.cloud/en-gb/blogs/aca-vs-aks-vs-aci)
+- [Pulumi: Azure Container Solutions](https://www.pulumi.com/blog/azure-container-solutions/)
