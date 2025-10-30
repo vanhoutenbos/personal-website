@@ -39,12 +39,12 @@ Hieronder een overzicht van de belangrijkste platformen:
 ## Beslismatrix: Wanneer kies je welk platform?
 
 **Kies AKS als:**
-- Je team ervaring heeft met Kubernetes en je maximale controle wilt.
-- Je complexe workloads, service mesh, custom networking of compliance nodig hebt.
-- Je wilt integreren met Azure DevOps, GitHub Actions, monitoring en security.
 
 **Kies ACA als:**
-- Je snel microservices of APIs wilt deployen zonder clusterbeheer.
+
+- Je Windows containers wilt draaien (alleen als legacy of migratie vereist is, anders: kies Linux containers!)
+
+> ⚠️ **Let op:** Hoewel AKS Windows containers ondersteunt en production ready is, raad ik persoonlijk Windows containers af voor nieuwe projecten. De community is veel kleiner dan bij Linux containers, er zijn meer bekende issues en minder support. Kies alleen Windows containers als je legacy .NET apps hebt die niet naar Linux kunnen. Voor moderne workloads is Linux de standaard en veel stabieler.
 - Je wilt profiteren van autoscaling en serverless pricing.
 - Je team weinig Kubernetes-kennis heeft, maar wel moderne cloud native apps bouwt.
 
