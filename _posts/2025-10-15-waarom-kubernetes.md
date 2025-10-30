@@ -15,7 +15,9 @@ tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, clo
 
 # Waarom kiezen zoveel developers voor Kubernetes?
 
-Je hebt er ongetwijfeld over gehoord: Kubernetes. Dat magische platform dat schaalbaarheid belooft, kosten moet besparen en de toekomst van cloud-native applicaties zou zijn. Maar klopt dat verhaal eigenlijk wel? En belangrijker: is het iets voor jouw organisatie?
+
+> 💡 **Tip:** Wil je weten welk Kubernetes-platform het beste bij jouw situatie past? Lees ook mijn [Kubernetes Keuzehulp](../2025-10-29-kubernetes-keuzehulp) voor een complete vergelijking en beslismatrix.
+
 
 Na jaren ervaring met Kubernetes – van mijn eerste stappen met Docker Swarm tot complexe productie-omgevingen – deel ik graag een eerlijk verhaal over wanneer je wel en niet voor Kubernetes moet kiezen. Geen hype, gewoon praktische inzichten.
 
@@ -240,9 +242,8 @@ Beide zijn uitstekende keuzes voor productie-workloads.
 ---
 
 **Bronnen en verder lezen:**
-- [Kubernetes: What, Why, How & Architecture (Pros & Cons)](https://medium.com/@goyalarchana17/kubernetes-what-why-how-architecture-with-pros-cons-d0ffd1396df5)
-- [Is Kubernetes Worth It? A 2024 Guide to Cost & Benefits](https://www.plural.sh/blog/is-kubernetes-worth-it/)
-- [Comparative Analysis of OpenShift, AKS, GKE](https://medium.com/@kshism/a-comparative-analysis-of-openshift-azure-kubernetes-service-aks-and-google-kubernetes-engine-655b961df1e5)
-- [OpenShift vs Kubernetes: What should you use?](https://northflank.com/blog/openshift-vs-kubernetes)
-- [The Good and the Bad of Kubernetes Container Orchestration](https://www.altexsoft.com/blog/kubernetes-pros-cons/)
-- [Azure Kubernetes Service: In-Depth Guide](https://www.cloud4c.com/blogs/in-depth-guide-to-azure-kubernetes-service)
+
+---
+## Related articles
+
+- [Kubernetes Keuzehulp: AKS, ACA, ACI, OpenShift of zelf hosten?](../2025-10-29-kubernetes-keuzehulp)
