@@ -81,3 +81,17 @@ Ja. Jekyll is lichtgewicht, goed voor GitHub Pages en werkt perfect samen met AI
 **Moet ik AI altijd vermelden?**  
 Transparantie is sterk aan te raden, zeker in professionele context.
 
+---
+## Related articles
+
+{% assign related_posts = site.posts | where_exp: "post", "post != page and post.tags | array_intersect: page.tags | size > 0" %}
+{% if related_posts.size > 0 %}
+<ul>
+  {% for post in related_posts limit:5 %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Geen gerelateerde artikelen gevonden.</p>
+{% endif %}
+

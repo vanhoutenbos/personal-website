@@ -254,4 +254,13 @@ Beide zijn uitstekende keuzes voor productie-workloads.
 ---
 ## Related articles
 
-- [Kubernetes Keuzehulp: AKS, ACA, ACI, OpenShift of zelf hosten?](../2025-10-29-kubernetes-keuzehulp)
+{% assign related_posts = site.posts | where_exp: "post", "post != page and post.tags | array_intersect: page.tags | size > 0" %}
+{% if related_posts.size > 0 %}
+<ul>
+	{% for post in related_posts limit:5 %}
+		<li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>Geen gerelateerde artikelen gevonden.</p>
+{% endif %}
