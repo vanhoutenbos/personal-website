@@ -151,7 +151,7 @@ AKS is geweldig, maar niet altijd de beste keuze:
 
 | Scenario | Betere optie |
 |----------|-------------|
-| Strikte enterprise governance vereist | {% include smart-link.html slug="getting-started-openshift" text="Azure Red Hat OpenShift (ARO)" fallback="Azure Red Hat OpenShift (blog volgt)" %} |
+| Strikte enterprise governance vereist | {% include smart-link.html slug="getting-started-aro" text="Azure Red Hat OpenShift (ARO)" fallback="Azure Red Hat OpenShift (blog volgt)" %} |
 | Data moet on-premises blijven | {% include smart-link.html slug="getting-started-openshift-onprem" text="OpenShift on-prem" fallback="OpenShift on-prem (blog volgt)" %} |
 | Simpele stateless apps | {% include smart-link.html slug="getting-started-aca-aci" text="Azure Container Apps" fallback="Azure Container Apps" %} |
 
@@ -173,7 +173,7 @@ AKS geeft je **pure Kubernetes** met **minimale operationele overhead**. Perfect
 
 ### Volgende stappen
 
-- **Wil je enterprise features?** Lees over {% include smart-link.html slug="getting-started-openshift" text="Azure Red Hat OpenShift (ARO)" fallback="ARO (blog volgt)" %}
+- **Wil je enterprise features?** Lees over {% include smart-link.html slug="getting-started-aro" text="Azure Red Hat OpenShift (ARO)" fallback="ARO (blog volgt)" %}
 - **Meer Kubernetes leren?** Bekijk de [Kubernetes overzichtspagina](/kubernetes/)
 - **Twijfel tussen platforms?** Lees de {% include smart-link.html slug="kubernetes-keuzehulp" text="Kubernetes Keuzehulp" fallback="Kubernetes Keuzehulp" %}
 
