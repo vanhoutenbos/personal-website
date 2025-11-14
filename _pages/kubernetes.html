@@ -1,80 +1,610 @@
 ---
 layout: default
-title: "Kubernetes"
+title: "Kubernetes & Container Orchestratie"
 permalink: /kubernetes/
-description: "Een overzichtspagina voor alles over Kubernetes: van introductie tot geavanceerde onderwerpen."
+description: "Van containers tot Kubernetes: welk platform past bij jou? Ontdek de mogelijkheden van ACA/ACI, AKS, ARO en on-premise Kubernetes."
 ---
 
 <div class="kubernetes-overview">
   <header>
-    <h1>Kubernetes</h1>
-    <p>Welkom bij de centrale hub voor alles over Kubernetes. Hier vind je een overzicht van alle relevante onderwerpen, gidsen en blogposts.</p>
+    <h1>Van Containers tot Kubernetes</h1>
+    <p>Welkom bij de centrale hub voor container orchestratie. Of je nu net begint met containers of een enterprise Kubernetes platform zoekt, hier vind je de juiste guidance.</p>
   </header>
 
-  <section>
-    <h2>Wat is Kubernetes?</h2>
-    <p>Kubernetes is een orkestratieplatform dat containers (eenheden van software) plant, monitort en herstelt op een cluster van machines. Het zorgt voor:</p>
-    <ul>
-      <li>Declaratieve gewenste toestand (YAML → realiteit)</li>
-      <li>Zelfherstel (restart bij crash, rescheduling bij node failure)</li>
-      <li>Schaling (horizontaal op metrics/events)</li>
-      <li>Netwerk abstractie (Service + Ingress/Route)</li>
-      <li>Extensie via CRDs & Operators</li>
-    </ul>
-    <p><strong>Denk aan Kubernetes als een “autopilot” voor container workloads met een uitbreidbaar ecosysteem.</strong></p>
-    <a href="/blog/2025/10/15/waarom-kubernetes" class="btn">Lees meer: Waarom Kubernetes?</a>
+  <section class="decision-tree">
+    <h2>🧭 Welk pad past bij jou?</h2>
+    <p>Na het lezen van de fundamentele artikelen, kies je jouw pad gebaseerd op je behoeften:</p>
+    
+    <div class="path-container">
+      <div class="path path-a">
+        <h3>🚀 PAD A: Lightweight</h3>
+        <p><strong>Voor:</strong> Eenvoudige container workloads zonder orchestratie</p>
+        <p><strong>Wanneer:</strong> 1-5 containers, serverless, batch jobs</p>
+        <p><strong>Platforms:</strong> Azure Container Apps (ACA), Azure Container Instances (ACI)</p>
+        <a href="#pad-a" class="btn btn-primary">Verken PAD A →</a>
+      </div>
+      
+      <div class="path path-b">
+        <h3>☸️ PAD B: Managed Kubernetes</h3>
+        <p><strong>Voor:</strong> Volledige Kubernetes zonder cluster management</p>
+        <p><strong>Wanneer:</strong> Microservices, schaalbaarheid, cloud-native apps</p>
+        <p><strong>Platforms:</strong> Azure Kubernetes Service (AKS), Azure Red Hat OpenShift (ARO)</p>
+        <a href="#pad-b" class="btn btn-primary">Verken PAD B →</a>
+      </div>
+      
+      <div class="path path-c">
+        <h3>🏢 PAD C: Self-Hosted</h3>
+        <p><strong>Voor:</strong> Volledige controle, on-premise, compliance</p>
+        <p><strong>Wanneer:</strong> Data residency, air-gapped, enterprise governance</p>
+        <p><strong>Platforms:</strong> OpenShift on-prem, Vanilla Kubernetes, K3s</p>
+        <a href="#pad-c" class="btn btn-primary">Verken PAD C →</a>
+      </div>
+    </div>
   </section>
 
-  <section>
-    <h2>Evolutie & Volwassenheidsstadia</h2>
-    <p>Ontdek hoe organisaties groeien in hun gebruik van Kubernetes, van prototypes tot enterprise-grade platforms:</p>
-    <ul>
-      <li><strong>Prototype:</strong> 1–3 containers, focus op iteratie. Volgende stap: ACA/ACI.</li>
-      <li><strong>Early Microservices:</strong> 5–10 services, focus op consistentie. Volgende stap: AKS + Helm.</li>
-      <li><strong>Groei & Governance:</strong> 10–25 services, meerdere teams. Volgende stap: Policies, quotas, security baselines.</li>
-      <li><strong>Enterprise:</strong> >25 services, audits. Volgende stap: OpenShift, Service Mesh.</li>
-      <li><strong>Platform Optimalisatie:</strong> Focus op SLO’s, autoscaling, multi-cluster.</li>
-    </ul>
-    <a href="/blog/2025/10/29/kubernetes-keuzehulp" class="btn">Lees meer: Kubernetes Keuzehulp</a>
+  <section class="fundamentals">
+    <h2>📚 Start hier: Fundamentals (voor iedereen)</h2>
+    <p>Begin met deze artikelen om te begrijpen wanneer je containers en orchestratie nodig hebt:</p>
+    <ol class="article-list">
+      {% assign waarom_k8s = site.posts | where_exp: "post", "post.url contains 'waarom-kubernetes'" | first %}
+      {% if waarom_k8s %}
+      <li>
+        <a href="{{ waarom_k8s.url }}">
+          <strong>{{ waarom_k8s.title }}</strong>
+        </a>
+        <p>Containers basics, wanneer orchestratie, waarom Kubernetes boven alternatieven</p>
+      </li>
+      {% endif %}
+      
+      {% assign wat_k8s = site.posts | where_exp: "post", "post.url contains 'wat-kun-je-met-kubernetes'" | first %}
+      {% if wat_k8s %}
+      <li>
+        <a href="{{ wat_k8s.url }}">
+          <strong>{{ wat_k8s.title }}</strong>
+        </a>
+        <p>Schaalbaarheid, automatisering, multi-cloud, DevOps integratie, security</p>
+      </li>
+      {% endif %}
+      
+      {% assign keuzehulp = site.posts | where_exp: "post", "post.url contains 'kubernetes-keuzehulp'" | first %}
+      {% if keuzehulp %}
+      <li>
+        <a href="{{ keuzehulp.url }}">
+          <strong>{{ keuzehulp.title }}</strong>
+        </a>
+        <p>Vergelijkingstabel, beslisboom, use cases per platform</p>
+      </li>
+      {% endif %}
+    </ol>
   </section>
 
-  <section>
-    <h2>Kernarchitectuur</h2>
-    <p>Een overzicht van de belangrijkste Kubernetes-componenten:</p>
-    <ul>
-      <li><strong>Pod:</strong> 1 of meer containers samen. Focus: resource limits, restarts.</li>
-      <li><strong>Deployment:</strong> Declaratief rollout & replica management. Focus: strategieën zoals rolling updates.</li>
-      <li><strong>Service:</strong> Stabiel cluster-IP of load balancer. Focus: type (ClusterIP, NodePort, LoadBalancer).</li>
-      <li><strong>Ingress / Route:</strong> HTTP routing + TLS. Focus: controller keuze (NGINX, AGIC).</li>
-      <li><strong>ConfigMap / Secret:</strong> Configuratie & geheimen. Focus: integratie met external secret stores.</li>
-    </ul>
-    <a href="/drafts/networking-kubernetes" class="btn">Lees meer: Networking in Kubernetes</a>
+  <section id="pad-a" class="path-section">
+    <h2>🚀 PAD A: Lightweight Container Platforms</h2>
+    <p class="path-intro"><em>"Ik wil gewoon een container draaien, geen cluster beheren"</em></p>
+    <p>Voor teams die containers willen draaien zonder de complexiteit van Kubernetes. Perfect voor serverless workloads, batch jobs, en eenvoudige microservices.</p>
+    
+    <div class="article-series">
+      <h3>Getting Started</h3>
+      <ol>
+        {% assign aca_aci = site.posts | where_exp: "post", "post.url contains 'getting-started-aca-aci'" | first %}
+        {% if aca_aci %}
+        <li>
+          <a href="{{ aca_aci.url }}">
+            <strong>{{ aca_aci.title }}</strong>
+          </a>
+          <p>Wanneer ACA vs ACI, quickstart guides, pricing, limitaties</p>
+        </li>
+        {% else %}
+        <li>
+          <em>Komend: Containers zonder Kubernetes: Azure Container Apps & Container Instances</em>
+          <p>Wanneer ACA vs ACI, quickstart guides, pricing, limitaties</p>
+        </li>
+        {% endif %}
+      </ol>
+    </div>
+
+    <div class="decision-helper">
+      <h4>✅ Kies dit pad als:</h4>
+      <ul>
+        <li>Je 1-5 containers hebt zonder complexe dependencies</li>
+        <li>Je serverless auto-scaling wilt zonder node management</li>
+        <li>Je snel wilt starten zonder Kubernetes kennis</li>
+        <li>Je betaalt per gebruik in plaats van vaste cluster kosten</li>
+      </ul>
+      
+      <h4>⚠️ Niet geschikt als:</h4>
+      <ul>
+        <li>Je custom networking (service mesh, ingress) nodig hebt</li>
+        <li>Je stateful workloads met persistent volumes wilt</li>
+        <li>Je multi-tenancy of complexe RBAC vereist</li>
+        <li>Je Kubernetes API en ecosystem (Helm, operators) wilt gebruiken</li>
+      </ul>
+    </div>
   </section>
 
-  <section>
-    <h2>Operationele Thema’s</h2>
-    <p>Belangrijke operationele onderwerpen en hun risico’s:</p>
-    <ul>
-      <li><strong>Security:</strong> Least privilege, secrets extern. Risico: credential leakage.</li>
-      <li><strong>Networking:</strong> Netpol + egress beheersing. Risico: segmentatie kostbaar.</li>
-      <li><strong>Observability:</strong> Metrics, tracing, logs. Risico: blind bij incidenten.</li>
-      <li><strong>Governance:</strong> Quotas, labels, cost center. Risico: onvoorspelbare kosten.</li>
-    </ul>
-    <a href="/drafts/security-best-practices" class="btn">Lees meer: Security Best Practices</a>
+  <section id="pad-b" class="path-section">
+    <h2>☸️ PAD B: Managed Kubernetes</h2>
+    <p class="path-intro"><em>"Ik wil Kubernetes zonder de operationele overhead"</em></p>
+    <p>Voor teams die volledige Kubernetes functionaliteit willen met beheerd control plane. Cloud provider beheert upgrades, patches en hoge beschikbaarheid.</p>
+    
+    <div class="article-series">
+      <h3>Getting Started</h3>
+      <ol>
+        {% assign aks_post = site.posts | where_exp: "post", "post.url contains 'getting-started-aks'" | first %}
+        {% if aks_post %}
+        <li>
+          <a href="{{ aks_post.url }}">
+            <strong>{{ aks_post.title }}</strong>
+          </a>
+          <p>Cluster aanmaken via CLI/Portal, kubectl setup, eerste deployment, monitoring</p>
+        </li>
+        {% else %}
+        <li>
+          <em>Komend: Snel aan de slag met Azure Kubernetes Service (AKS)</em>
+          <p>Cluster aanmaken via CLI/Portal, kubectl setup, eerste deployment, monitoring</p>
+        </li>
+        {% endif %}
+        
+        {% assign aro_post = site.posts | where_exp: "post", "post.url contains 'getting-started-openshift'" | where_exp: "post", "post.url contains '-onprem' == false" | first %}
+        {% if aro_post %}
+        <li>
+          <a href="{{ aro_post.url }}">
+            <strong>{{ aro_post.title }}</strong>
+          </a>
+          <p>ARO vs AKS, enterprise features, oc CLI, developer workflow, security out-of-box</p>
+        </li>
+        {% else %}
+        <li>
+          <em>Komend: Getting Started met Azure Red Hat OpenShift (ARO)</em>
+          <p>ARO vs AKS, enterprise features, oc CLI, developer workflow, security out-of-box</p>
+        </li>
+        {% endif %}
+      </ol>
+    </div>
+
+    <div class="comparison">
+      <h4>AKS vs ARO: Wanneer welke?</h4>
+      <table>
+        <tr>
+          <th>Aspect</th>
+          <th>AKS</th>
+          <th>ARO</th>
+        </tr>
+        <tr>
+          <td>Kosten</td>
+          <td>Lager (geen licenties)</td>
+          <td>Hoger (OpenShift licenties)</td>
+        </tr>
+        <tr>
+          <td>Security</td>
+          <td>Basis, zelf inrichten</td>
+          <td>Enterprise-grade out-of-box</td>
+        </tr>
+        <tr>
+          <td>Developer UX</td>
+          <td>Kubernetes native</td>
+          <td>Geïntegreerde tooling (web console, S2I)</td>
+        </tr>
+        <tr>
+          <td>Compliance</td>
+          <td>Zelf configureren</td>
+          <td>SCC, multi-tenancy ingebouwd</td>
+        </tr>
+        <tr>
+          <td>Leerncurve</td>
+          <td>Standard Kubernetes</td>
+          <td>OpenShift concepten extra</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="decision-helper">
+      <h4>✅ Kies AKS als:</h4>
+      <ul>
+        <li>Je standaard Kubernetes wilt zonder vendor-specifieke extensies</li>
+        <li>Je kosten wilt optimaliseren</li>
+        <li>Je flexibiliteit wilt in tooling keuzes</li>
+        <li>Je een actieve Kubernetes community/expertise hebt</li>
+      </ul>
+      
+      <h4>✅ Kies ARO als:</h4>
+      <ul>
+        <li>Je enterprise security & compliance vereisten hebt</li>
+        <li>Je multi-tenancy out-of-box nodig hebt</li>
+        <li>Je Red Hat support en certificeringen vereist</li>
+        <li>Je geïntegreerde CI/CD en developer tooling wilt</li>
+      </ul>
+    </div>
   </section>
 
-  <section>
-    <h2>Developer-laag</h2>
-    <p>Welke programmeertalen en tools passen het beste bij Kubernetes?</p>
-    <ul>
-      <li><strong>Go:</strong> Snel startup, lage footprint. Use case: high-performance APIs.</li>
-      <li><strong>.NET:</strong> Productiviteit, tooling. Use case: enterprise services.</li>
-      <li><strong>Python:</strong> Ecosystem (data/ML). Use case: ML inference met scaling.</li>
-    </ul>
-    <a href="/drafts/helm-best-practices" class="btn">Lees meer: Helm Best Practices</a>
+  <section id="pad-c" class="path-section">
+    <h2>🏢 PAD C: Self-Hosted Kubernetes</h2>
+    <p class="path-intro"><em>"Ik wil volledige controle over mijn infrastructuur"</em></p>
+    <p>Voor organisaties met specifieke compliance eisen, data residency vereisten, of bestaande on-premise infrastructuur.</p>
+    
+    <div class="article-series">
+      <h3>Getting Started</h3>
+      <ol>
+        {% assign onprem_post = site.posts | where_exp: "post", "post.url contains 'getting-started-openshift-onprem'" | first %}
+        {% if onprem_post %}
+        <li>
+          <a href="{{ onprem_post.url }}">
+            <strong>{{ onprem_post.title }}</strong>
+          </a>
+          <p>Infrastructure requirements, installatie, high availability, backup/restore</p>
+        </li>
+        {% else %}
+        <li>
+          <em>Komend: OpenShift on-premises: wanneer en hoe te starten</em>
+          <p>Infrastructure requirements, installatie, high availability, backup/restore</p>
+        </li>
+        {% endif %}
+        <li>
+          <em>Komend: Vanilla Kubernetes: kubeadm, K3s en Rancher</em>
+          <p>Upstream Kubernetes installeren, vergelijking distros, management tools</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="decision-helper">
+      <h4>✅ Kies dit pad als:</h4>
+      <ul>
+        <li>Je data residency of compliance vereisten hebt (GDPR, HIPAA)</li>
+        <li>Je in air-gapped omgevingen werkt</li>
+        <li>Je extreem lage latency nodig hebt (edge computing)</li>
+        <li>Je bestaande on-premise infrastructuur wilt benutten</li>
+        <li>Je volledige controle over patching en upgrades wilt</li>
+      </ul>
+      
+      <h4>⚠️ Niet geschikt als:</h4>
+      <ul>
+        <li>Je geen dedicated operations team hebt</li>
+        <li>Je snelle schaalbaarheid zonder hardware investeringen wilt</li>
+        <li>Je geen ervaring hebt met datacenter management</li>
+        <li>Je disaster recovery zonder geografische spreiding wilt</li>
+      </ul>
+    </div>
+
+    <div class="platform-comparison">
+      <h4>Self-hosted opties</h4>
+      <ul>
+        <li><strong>OpenShift on-prem:</strong> Enterprise platform, geïntegreerde security, support contract beschikbaar</li>
+        <li><strong>Vanilla Kubernetes (kubeadm):</strong> Upstream, maximale flexibiliteit, zelf support regelen</li>
+        <li><strong>K3s:</strong> Lightweight variant voor edge/IoT, klein resource footprint</li>
+        <li><strong>Rancher:</strong> Multi-cluster management platform, ondersteunt verschillende distros</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="kubernetes-core">
+    <h2>🏗️ Kubernetes Core Concepts</h2>
+    <p>Ongeacht welk pad je kiest, deze concepten zijn fundamenteel voor Kubernetes:</p>
+    
+    <div class="concepts-grid">
+      <div class="concept">
+        <h3>Pods & Workloads</h3>
+        <ul>
+          <li><strong>Pod:</strong> Kleinste deploybare eenheid, 1+ containers</li>
+          <li><strong>Deployment:</strong> Declaratief rollout & replica management</li>
+          <li><strong>StatefulSet:</strong> Voor stateful applicaties met stabiele identiteit</li>
+          <li><strong>DaemonSet:</strong> Draait op elke node (logging, monitoring)</li>
+        </ul>
+      </div>
+      
+      <div class="concept">
+        <h3>Networking</h3>
+        <ul>
+          <li><strong>Service:</strong> Stabiel IP voor pod set (ClusterIP, LoadBalancer)</li>
+          <li><strong>Ingress:</strong> HTTP routing + TLS terminatie</li>
+          <li><strong>NetworkPolicy:</strong> Firewall regels tussen pods</li>
+          <li><strong>DNS:</strong> Service discovery binnen cluster</li>
+        </ul>
+      </div>
+      
+      <div class="concept">
+        <h3>Configuration & Storage</h3>
+        <ul>
+          <li><strong>ConfigMap:</strong> Configuratie als key-value pairs</li>
+          <li><strong>Secret:</strong> Gevoelige data (wachtwoorden, certificates)</li>
+          <li><strong>PersistentVolume:</strong> Opslag die pod lifecycle overleeft</li>
+          <li><strong>StorageClass:</strong> Dynamic provisioning van volumes</li>
+        </ul>
+      </div>
+      
+      <div class="concept">
+        <h3>Security & Access</h3>
+        <ul>
+          <li><strong>RBAC:</strong> Role-Based Access Control</li>
+          <li><strong>ServiceAccount:</strong> Identity voor pods</li>
+          <li><strong>PodSecurityPolicy:</strong> Security constraints voor pods</li>
+          <li><strong>Admission Controllers:</strong> Validatie/mutatie van resources</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="advanced-topics">
+    <h2>🚀 Volgende Stappen: Advanced Topics</h2>
+    <p>Na je getting started, verdiep je in deze onderwerpen:</p>
+    
+    <div class="topic-grid">
+      <div class="topic">
+        <h3>CI/CD & GitOps</h3>
+        <p>ArgoCD, Flux, GitHub Actions, Azure DevOps integratie</p>
+        <a href="/drafts/cicd-gitops-advanced" class="btn">Lees meer</a>
+      </div>
+      
+      <div class="topic">
+        <h3>Observability</h3>
+        <p>Prometheus, Grafana, OpenTelemetry, distributed tracing</p>
+        <a href="/drafts/observability-monitoring" class="btn">Lees meer</a>
+      </div>
+      
+      <div class="topic">
+        <h3>Security Best Practices</h3>
+        <p>Zero-trust, policy enforcement, image scanning, secrets management</p>
+        <a href="/drafts/security-best-practices" class="btn">Lees meer</a>
+      </div>
+      
+      <div class="topic">
+        <h3>Helm & Package Management</h3>
+        <p>Chart structuur, values, templating, troubleshooting</p>
+        <a href="/drafts/helm-best-practices" class="btn">Lees meer</a>
+      </div>
+      
+      <div class="topic">
+        <h3>Networking Advanced</h3>
+        <p>Service mesh (Istio, Linkerd), multi-cluster networking</p>
+        <a href="/drafts/networking-advanced" class="btn">Lees meer</a>
+      </div>
+      
+      <div class="topic">
+        <h3>Cost Optimization</h3>
+        <p>Resource quotas, autoscaling, spot instances, FinOps</p>
+        <a href="/drafts/kostenbeheer-finops" class="btn">Lees meer</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="maturity-model">
+    <h2>📊 Kubernetes Maturity Model</h2>
+    <p>Waar staat jouw organisatie? Gebruik dit model om je volgende stappen te bepalen:</p>
+    
+    <table class="maturity-table">
+      <thead>
+        <tr>
+          <th>Stadium</th>
+          <th>Kenmerken</th>
+          <th>Aanbevolen Platform</th>
+          <th>Focus Areas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Prototype</strong></td>
+          <td>1-3 containers, experimenten</td>
+          <td>ACA/ACI of lokale Docker</td>
+          <td>Iteratie snelheid, learning</td>
+        </tr>
+        <tr>
+          <td><strong>Early Adoption</strong></td>
+          <td>5-10 services, 1 team</td>
+          <td>AKS Basic</td>
+          <td>CI/CD, basic monitoring</td>
+        </tr>
+        <tr>
+          <td><strong>Growth</strong></td>
+          <td>10-25 services, meerdere teams</td>
+          <td>AKS Standard + governance</td>
+          <td>Namespaces, RBAC, resource quotas</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise</strong></td>
+          <td>>25 services, audits, compliance</td>
+          <td>ARO of OpenShift on-prem</td>
+          <td>Security policies, multi-tenancy, audit logging</td>
+        </tr>
+        <tr>
+          <td><strong>Platform Engineering</strong></td>
+          <td>Multi-cluster, self-service</td>
+          <td>Hybrid (AKS + on-prem)</td>
+          <td>Service mesh, GitOps, SLO management</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <footer>
-    <p>Blijf op de hoogte van nieuwe artikelen en updates over Kubernetes.</p>
+    <h2>📬 Blijf op de hoogte</h2>
+    <p>Nieuwe artikelen, best practices en real-world experiences met Kubernetes en container platforms.</p>
+    <p><a href="/contact/" class="btn btn-primary">Contact voor advies</a></p>
   </footer>
 </div>
+
+<style>
+.path-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.path {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #f9f9f9;
+}
+
+.path-a { border-left: 4px solid #28a745; }
+.path-b { border-left: 4px solid #007bff; }
+.path-c { border-left: 4px solid #6c757d; }
+
+.path h3 {
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.path-section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.path-intro {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.decision-helper {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 4px;
+}
+
+.decision-helper h4 {
+  margin-top: 1rem;
+}
+
+.decision-helper ul {
+  margin-left: 1.5rem;
+}
+
+.concepts-grid, .topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.concept, .topic {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.maturity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.maturity-table th,
+.maturity-table td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.maturity-table th {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.maturity-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.comparison table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+}
+
+.comparison th,
+.comparison td {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.comparison th {
+  background: #f8f9fa;
+}
+
+.article-list {
+  list-style: none;
+  counter-reset: article-counter;
+  padding-left: 0;
+}
+
+.article-list li {
+  counter-increment: article-counter;
+  margin: 1.5rem 0;
+  padding-left: 3rem;
+  position: relative;
+}
+
+.article-list li::before {
+  content: counter(article-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #007bff;
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.article-series ol {
+  list-style: none;
+  counter-reset: series-counter;
+  padding-left: 0;
+}
+
+.article-series li {
+  counter-increment: series-counter;
+  margin: 1rem 0;
+  padding-left: 2.5rem;
+  position: relative;
+}
+
+.article-series li::before {
+  content: counter(series-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #28a745;
+  color: white;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+.btn-primary {
+  background: #28a745;
+}
+
+.btn-primary:hover {
+  background: #1e7e34;
+}
+</style>

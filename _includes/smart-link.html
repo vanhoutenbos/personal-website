@@ -1,0 +1,29 @@
+{% comment %}
+  Smart Link - Only shows link if target post exists, otherwise shows fallback text
+  
+  Usage:
+  {% include smart-link.html 
+     url="/blog/2025/11/27/getting-started-aca-aci.html" 
+     text="Containers zonder Kubernetes: ACA & ACI"
+     fallback="ACA & ACI - blog volgt binnenkort"
+  %}
+  
+  Or search by slug:
+  {% include smart-link.html 
+     slug="getting-started-aca-aci" 
+     text="Containers zonder Kubernetes: ACA & ACI"
+     fallback="ACA & ACI - blog volgt binnenkort"
+  %}
+{% endcomment %}
+
+{% if include.slug %}
+  {% assign target_post = site.posts | where_exp: "post", "post.url contains include.slug" | first %}
+{% elsif include.url %}
+  {% assign target_post = site.posts | where: "url", include.url | first %}
+{% endif %}
+
+{% if target_post %}
+[{{ include.text }}]({{ target_post.url }})
+{% else %}
+{{ include.fallback }}
+{% endif %}

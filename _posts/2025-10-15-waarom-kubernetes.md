@@ -1,112 +1,181 @@
 ---
 layout: single
-title: "Waarom kiezen zoveel developers voor Kubernetes?"
+title: "Van Docker tot Kubernetes: wanneer heb je orchestratie nodig?"
 permalink: /blog/:year/:month/:day/:title.html
 date: 2025-10-15 06:00:00 +0200
-description: "Ontdek wanneer Kubernetes wel of niet de juiste keuze is voor jouw organisatie. Een praktische gids over schaalbaarheid, kostenbeheer en soevereiniteit, met persoonlijke ervaringen uit het veld."
+description: "Ontdek het verschil tussen containers en orchestratie. Wanneer volstaat Docker, en wanneer heb je Kubernetes nodig? Een praktische gids met real-world voorbeelden."
 image: /assets/img/post-default.svg
-image_alt: "Kubernetes container orchestration"
+image_alt: "Van containers naar Kubernetes orchestratie"
 categories: [blog, kubernetes]
 toc: true
 lang: nl
-excerpt: "Wanneer kies je wél of niet voor Kubernetes? Gids over schaalbaarheid, kostenbeheer en soevereiniteit met praktijkvoorbeelden."
-tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, soevereiniteit]
+excerpt: "Van containers basics tot Kubernetes: wanneer heb je orchestratie nodig en wanneer niet? Praktische gids met beslispunten."
+tags: [kubernetes, docker, containers, orchestratie, schaalbaarheid, cloud native]
 series: "Kubernetes Top-Down"
+series_order: 1
+series_path: "fundamentals"
 ---
 
-# Waarom kiezen zoveel developers voor Kubernetes?
+# Van Docker tot Kubernetes: wanneer heb je orchestratie nodig?
 
-Je hebt er ongetwijfeld over gehoord: Kubernetes. Dat magische platform dat schaalbaarheid belooft, kosten moet besparen en de toekomst van cloud-native applicaties zou zijn. Maar klopt dat verhaal eigenlijk wel? En belangrijker: is het iets voor jouw organisatie?
+Je hebt waarschijnlijk gehoord over containers en Kubernetes. Maar wat is het verschil? En belangrijker: heb je überhaupt Kubernetes nodig, of volstaat iets simpelers?
 
+Na jaren ervaring met containers – van simpele Docker setups tot complexe Kubernetes productie-omgevingen – deel ik een eerlijk verhaal over wanneer je wat nodig hebt. Geen hype, gewoon praktische inzichten.
 
-> 💡 **Tip:** Wil je weten welk Kubernetes-platform het beste bij jouw situatie past? Lees ook mijn [Kubernetes Keuzehulp](../2025-10-29-kubernetes-keuzehulp) voor een complete vergelijking en beslismatrix.
+> 💡 **Tip:** Wil je direct naar platform-keuzes? Lees mijn {% include smart-link.html slug="kubernetes-keuzehulp" text="Kubernetes Keuzehulp" fallback="Kubernetes Keuzehulp" %} voor een complete vergelijking.
 
+## Containers 101: de basis
 
-Na jaren ervaring met Kubernetes – van mijn eerste stappen met Docker Swarm tot complexe productie-omgevingen – deel ik graag een eerlijk verhaal over wanneer je wel en niet voor Kubernetes moet kiezen. Geen hype, gewoon praktische inzichten.
+Voordat we over Kubernetes praten, moeten we begrijpen wat **containers** zijn en waarom ze zo populair zijn.
+
+### Wat zijn containers?
+
+Een container is een gestandaardiseerde eenheid van software die:
+- **Code** bevat (je applicatie)
+- **Dependencies** bundelt (libraries, runtime)
+- **Configuratie** meeneemt (environment settings)
+- **Consistent** draait op elke machine (laptop, server, cloud)
+
+**De metafoor:** Denk aan een container zoals een scheepvaartcontainer. Of je nu auto's, meubels of elektronica vervoert, de container zelf is gestandaardiseerd. Zo werken software containers ook – of je nu Python, Java of .NET draait, de container-interface blijft hetzelfde.
+
+### Docker: de populairste container runtime
+
+**Docker** is de meest bekende tool voor het bouwen en draaien van containers. Met Docker kun je:
+- Een applicatie en al zijn dependencies verpakken in een image
+- Die image overal draaien waar Docker geïnstalleerd is
+- Snel starten en stoppen (seconden in plaats van minuten zoals bij VM's)
+
+**Voorbeeld:** Een Node.js webserver in Docker:
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["node", "server.js"]
+```
+
+Bouwen en draaien:
+```bash
+docker build -t my-web-app .
+docker run -p 3000:3000 my-web-app
+```
+
+Dat is het! Je hebt nu een draaiende applicatie, zonder dat je Node.js op je systeem hoeft te installeren.
+
+### Waarom zijn containers zo populair?
+
+1. **"Works on my machine" is verleden tijd** - Als het in een container draait op je laptop, draait het ook in productie
+2. **Snelle deployments** - Containers starten in seconden, VM's in minuten
+3. **Efficiënt resource gebruik** - Tientallen containers op één server, zonder VM overhead
+4. **Isolatie** - Elke container is geïsoleerd, crashes beïnvloeden andere containers niet
+5. **Versioning** - Container images zijn versionable en reproduceerbaar
+
+## Het beslispunt: wanneer heb je orchestratie nodig?
+
+Oké, containers zijn geweldig. Maar wanneer volstaat **gewoon Docker**, en wanneer heb je **orchestratie** nodig?
+
+### Scenario 1: Je hebt GEEN orchestratie nodig
+
+**Situatie:**
+- Je draait 1-5 containers
+- Schaal verandert niet (of zelden)
+- Downtime van een paar minuten is acceptabel
+- Een enkel team beheert alles
+- Eenvoudige architectuur
+
+**Voorbeelden:**
+- Een simpele website met database
+- Een interne tool voor een klein team
+- Een proof-of-concept of prototype
+- Een side-project of portfolio site
+
+**Wat je WEL kunt gebruiken:**
+- **Docker Compose** voor lokale development
+- **Azure Container Instances (ACI)** - run één container in de cloud
+- **Azure Container Apps (ACA)** - serverless containers met auto-scaling
+- **Azure App Service** - managed platform-as-a-service
+
+💡 **Mijn advies:** Als je dit scenario herkent, lees dan verder bij {% include smart-link.html slug="getting-started-aca-aci" text="Containers zonder Kubernetes: ACA & ACI" fallback="ACA of ACI (blog volgt binnenkort)" %}
+
+### Scenario 2: Je hebt orchestratie nodig
+
+**Situatie:**
+- Je draait 10+ containers (microservices)
+- Schaalbaarheid is essentieel (van 10 naar 10.000 gebruikers)
+- Zero-downtime deployments zijn vereist
+- Meerdere teams deployen onafhankelijk
+- Complexe networking tussen services
+- Multi-cloud of hybrid-cloud strategie
+
+**Voorbeelden:**
+- E-commerce platform met piekbelasting
+- SaaS applicatie met groeiende gebruikersbase
+- Real-time applicaties (chat, gaming)
+- Data processing pipelines
+- Enterprise applicaties met compliance eisen
+
+**Wat je nodig hebt:**
+- **Kubernetes** - de industrie standaard voor container orchestratie
+- Managed opties: **AKS** (Azure), **EKS** (AWS), **GKE** (Google)
+- Enterprise: **OpenShift** (Red Hat)
 
 ## Wat is Kubernetes eigenlijk?
 
+Nu je snapt wanneer je orchestratie nodig hebt, wat is Kubernetes dan precies?
+
 Kubernetes is een **container orchestration platform** dat oorspronkelijk binnen Google is ontstaan om hun schaalbaarheid-uitdagingen op te lossen. Het is uitgegroeid tot het de-facto platform voor het beheren van gecontaineriseerde applicaties – en dat niet zonder reden.
 
-Wat maakt Kubernetes zo bijzonder? Het is **platform-agnostisch** en **taal-onafhankelijk**. Of je nu PHP, C#, Python, Java of Go schrijft, of je draait een frontend, een API, een database of cron jobs – Kubernetes kan het allemaal orchestreren. Deze flexibiliteit, gecombineerd met **vendor-soevereiniteit** (je bent niet vast aan één cloudprovider), heeft ervoor gezorgd dat Kubernetes de nieuwe standaard is geworden, waar traditionele VM's ooit waren.
+**De kernfunctie:** Kubernetes is een "autopilot" voor containers. Jij vertelt Kubernetes wat je wilt (declaratief via YAML), en Kubernetes zorgt dat het gebeurt en blijft gebeuren:
+- "Ik wil 5 kopieën van mijn webserver"
+- "Verdeel verkeer over deze kopieën"
+- "Als een kopie crasht, start een nieuwe"
+- "Schaal automatisch op bij hoge load"
 
-### Mijn eerste kennismaking
+Wat maakt Kubernetes zo bijzonder? 
+- **Platform-agnostisch**: Draai op Azure, AWS, Google Cloud, of je eigen datacenter
+- **Taal-onafhankelijk**: PHP, C#, Python, Java, Go – maakt niet uit
+- **Vendor-soevereiniteit**: Je bent niet vast aan één cloudprovider
+- **Enorm ecosystem**: Duizenden tools en extensions (Helm, Istio, ArgoCD, etc.)
 
-Mijn eerste echte ervaring was bij GGN, waar we een platform bouwden dat automatisch bankbetalingen moest koppelen aan dossiers. Soms waren dat een paar betalingen per dag, soms duizenden. Het moest **schaalbaar** zijn – alle verwerkingen moesten klaar zijn voordat de werkdag begon, zodat medewerkers eventuele uitval konden behandelen.
+### Waarom Kubernetes en niet Docker Swarm, Nomad, of Mesos?
 
-We kozen toen voor Docker Swarm (een Kubernetes-alternatief), en werkten samen met een ervaren partner. Het resultaat was een extreem schaalbaar platform waarop zowel de backend-koppelingen als de frontend voor medewerkers draaiden. Ik kwam van een achtergrond met weinig operations-ervaring – ik had nauwelijks met IIS of VM's gewerkt – dus de leercurve was groot. Maar met het juiste team leerde ik snel de principes van container orchestration.
+Goede vraag! Er zijn alternatieven:
+- **Docker Swarm**: Simpeler, maar minder features. Geen actieve development meer.
+- **Nomad** (HashiCorp): Goede optie, maar kleiner ecosystem
+- **Mesos**: Enterprise-grade, maar complexer en minder developer-friendly
 
-Die ervaring leerde me één ding: **schaalbaarheid hoeft niet complex te zijn, als je het juiste platform kiest**.
+**Kubernetes won** omdat:
+1. **Google backing + CNCF governance** - betrouwbare toekomst
+2. **Grootste community** - meer tools, meer expertise, meer support
+3. **Cloud-provider support** - AKS, EKS, GKE zijn volledig managed
+4. **Enterprise adoption** - Red Hat OpenShift, VMware Tanzu, Rancher
+5. **De facto standard** - meeste DevOps engineers kennen het
 
-## Het probleem dat Kubernetes oplost
+## Conclusie: wat past bij jou?
 
-Laat me een metafoor gebruiken: **Kubernetes is als een intelligent openbaar vervoer systeem**.
+Je hebt nu een goed beeld van containers, orchestratie, en wanneer Kubernetes zinvol is. Hier is mijn advies:
 
-Traditioneel hadden we tijdens daluren veel te veel treinen (servers) rijden die voor 5% bezet waren. Tijdens piekuren hadden we juist te weinig capaciteit. Met Kubernetes kun je binnen enkele minuten je capaciteit vervijfvoudigen of zelfs vertienvoudigen, en even snel weer afschalen als het rustiger wordt. Je kunt treinen langer maken (verticaal opschalen) of meer treinen inzetten (horizontaal opschalen).
+### Start met containers, niet met Kubernetes
 
-**Het resultaat?** Je gooit geen geld weg aan servers die niemand gebruikt.
+Begin met **Docker** en **Docker Compose** lokaal. Leer containers bouwen, debuggen en deployen. Als je 1-5 containers hebt, gebruik dan **Azure Container Apps** of **Container Instances**.
 
-### Het oude probleem: gokken met capaciteit
+### Overweeg Kubernetes als je groeit
 
-Vóór Kubernetes was capaciteitsplanning grotendeels giswerk. Je deed loadtests, maakte een educated guess, en schaalde op basis van verwachtingen. Het resultaat? Servers die voor 95% van de tijd bijna niks deden, maar wel voor 100% betaald moesten worden. Of erger: servers die crashten tijdens onverwachte piekbelasting.
+Wanneer je 10+ microservices hebt, complexe networking nodig hebt, of multi-cloud wilt, is het tijd voor Kubernetes. Start met **managed oplossingen** zoals AKS – laat de cloud provider het moeilijke werk doen.
 
-Kubernetes lost dit op met **auto-scaling**: je platform schaalt automatisch op en af op basis van daadwerkelijk gebruik. En met managed services zoals **Azure Kubernetes Service (AKS)** wordt het beheer nog eenvoudiger.
+### Kies het juiste pad
 
-## Wanneer is Kubernetes de juiste keuze?
+Zodra je weet wat je nodig hebt, kun je kiezen:
+- **Lightweight containers**: {% include smart-link.html slug="getting-started-aca-aci" text="Containers zonder Kubernetes: ACA & ACI" fallback="Azure Container Apps (ACA) of Container Instances (ACI) - *blog volgt binnenkort*" %}
+- **Managed Kubernetes**: {% include smart-link.html slug="getting-started-aks" text="Getting Started met AKS" fallback="Getting Started met AKS - *blog volgt binnenkort*" %}
+- **Self-hosted Kubernetes**: {% include smart-link.html slug="getting-started-openshift-onprem" text="OpenShift on-premises" fallback="OpenShift on-premises - *blog volgt binnenkort*" %}
 
-Kubernetes is niet voor iedereen. Laten we eerlijk zijn over wanneer het wel en niet zinvol is.
+### Volgende stappen
 
-### Kubernetes is geschikt als:
+Lees verder:
+1. {% include smart-link.html slug="wat-kun-je-met-kubernetes" text="Wat kun je met Kubernetes?" fallback="Wat kun je met Kubernetes?" %} - Diepere duik in mogelijkheden
+2. {% include smart-link.html slug="kubernetes-keuzehulp" text="Kubernetes Keuzehulp" fallback="Kubernetes Keuzehulp" %} - Platform vergelijking en beslisboom
+3. [Kubernetes overzichtspagina](/kubernetes/) - Complete learning path
 
-- **Je schaalbaarheid nodig hebt**: Je applicatie moet kunnen groeien van 10 naar 10.000 gebruikers zonder handmatige interventie
-- **Je multi-cloud of hybrid-cloud** strategieën overweegt: souvereiniteit en vendor-lock-in voorkomen zijn belangrijk
-- **Je complexe applicaties** hebt met meerdere services (microservices-architectuur)
-- **Je zero-downtime deployments** wilt: rolling updates zonder dat gebruikers het merken
-- **Je self-healing** belangrijk vindt: containers die automatisch herstarten bij crashes
-- **Kostenbeheer** essentieel is: betaal alleen voor wat je daadwerkelijk gebruikt
-
-### Kubernetes is overkill als:
-
-- Je een **simpele website** hebt (zoals een CV-site of klein portfolio)
-- Je een **enkele applicatie** draait zonder schaalbaarheid-eisen
-- Je **geen DevOps/operations-capaciteit** hebt om het platform te onderhouden (tenzij je kiest voor volledig beheerde oplossingen)
-- Je team **geen ervaring** heeft met containers en de leercurve te steil is voor je tijdslijn
-
-Voor eenvoudige scenario's zijn alternatieven zoals **Azure App Service**, **Azure Container Instances (ACI)** of zelfs statische hosting vaak een betere keuze.
-
-## Voordelen voor developers: vrijheid en flexibiliteit
-
-Als developer vind ik **taal-agnosticisme** het grootste voordeel. Je kunt in dezelfde organisatie Python-developers, C#-engineers en frontend-specialisten hebben, en iedereen kan hun applicaties op hetzelfde platform draaien. Multi-disciplinaire teams worden hierdoor veel efficiënter.
-
-Daarnaast is het **zelf hosten van tooling** fantastisch. Wil je een RabbitMQ-cluster voor messaging? Een Redis-cache voor snellere responses? Een PostgreSQL-database? Je spint deze met een paar commando's op, volledig geïntegreerd in je Kubernetes-cluster.
-
-### Developer experience verbeteringen
-
-Moderne tools zoals **Helm** (package manager voor Kubernetes) en **GitOps-workflows** maken deployment eenvoudiger dan ooit. Je definieert je gewenste state in Git, en tools zoals ArgoCD of Flux zorgen ervoor dat je cluster automatisch synchroon blijft.
-
-## Voordelen voor bedrijven: kostenbesparing en schaalbaarheid
-
-Laat me een concreet voorbeeld geven uit mijn eigen ervaring.
-
-Tijdens een sportevenement hadden we normaal gesproken een paar honderd gebruikers online. Een voetbalwedstrijd duurt ongeveer 90 minuten, en we wisten uit ervaring dat direct na de wedstrijd alle gebruikers naar de app zouden komen om de uitslagen te bekijken. Deze piek duurde zo'n 20-30 minuten.
-
-**Onze strategie:**
-- Tijdens de wedstrijd: gemiddelde bezetting met auto-scaling aan (voor kleine fluctuaties)
-- Bij minuut 80: proactief opschalen naar verwachte piekbelasting
-- Na 30 minuten: geleidelijk afschalen naar normaal niveau
-
-**Het resultaat?** In plaats van 120 minuten op tientallen servers te draaien, draaiden we effectief maar 30 minuten op volle capaciteit. Dat scheelde tienduizend
-
----
-## Related articles
-
-{% assign related_posts = site.posts | where_exp: "post", "post != page and post.tags | array_intersect: page.tags | size > 0" %}
-{% if related_posts.size > 0 %}
-<ul>
-  {% for post in related_posts limit:5 %}
-    <li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>Geen gerelateerde artikelen gevonden.</p>
-{% endif %}
+Kubernetes is krachtig, maar niet altijd nodig. Kies bewust, start klein, en schaal wanneer het echt toegevoegde waarde heeft.
