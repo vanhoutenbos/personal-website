@@ -140,11 +140,13 @@ Mijn persoonlijke voorkeur is AKS vanwege Azure-integratie en community support.
 ---
 ## Related articles
 
-{% assign related_posts = site.posts | where_exp: "post", "post != page and post.tags | array_intersect: page.tags | size > 0" %}
+{% assign related_posts = site.posts | where: "series", "Kubernetes Top-Down" %}
 {% if related_posts.size > 0 %}
 <ul>
   {% for post in related_posts limit:5 %}
+    {% if post.url != page.url %}
     <li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
+    {% endif %}
   {% endfor %}
 </ul>
 {% else %}
@@ -153,8 +155,10 @@ Mijn persoonlijke voorkeur is AKS vanwege Azure-integratie en community support.
 
 ## Directe gidsen
 In-depth stappenplannen en specifieke keuzes:
-- ACA vs ACI (container eenvoud vs serverless microservices): {% link _drafts/getting-started-aca-aci.md %}
-- AKS stap-voor-stap (volledige Kubernetes API): {% link _drafts/getting-started-aks.md %}
-- OpenShift (ARO vs on-premises enterprise): {% link _drafts/getting-started-openshift.md %}
+- {% include smart-link.html slug="getting-started-aca-aci" text="ACA vs ACI: container eenvoud vs serverless microservices" fallback="ACA vs ACI (blog volgt binnenkort)" %}
+- {% include smart-link.html slug="getting-started-aks" text="AKS stap-voor-stap: volledige Kubernetes API" fallback="AKS stap-voor-stap (blog volgt binnenkort)" %}
+- {% include smart-link.html slug="getting-started-aro" text="Azure Red Hat OpenShift (ARO): enterprise managed Kubernetes" fallback="ARO (blog volgt binnenkort)" %}
+- {% include smart-link.html slug="getting-started-openshift-onprem" text="OpenShift on-premises: self-hosted enterprise" fallback="OpenShift on-prem (blog volgt binnenkort)" %}
+
 
 
