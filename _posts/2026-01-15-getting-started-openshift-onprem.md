@@ -9,6 +9,8 @@ image: /assets/img/post-default.svg
 image_alt: "OpenShift on-premises Kubernetes"
 tags: [OpenShift, Kubernetes, On-Premises, Cloud]
 series: "Kubernetes Top-Down"
+series_order: 7
+series_path: "pad-c-onprem"
 ---
 
 # Waarom kiezen voor Kubernetes on-premises met OpenShift?

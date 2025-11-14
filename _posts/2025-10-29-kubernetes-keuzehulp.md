@@ -9,6 +9,8 @@ lang: nl
 canonical_url: "https://jeanpaulvanhouten.nl/blog/kubernetes-keuzehulp"
 tags: [kubernetes, AKS, OpenShift, containers, cloud native, soevereiniteit]
 series: "Kubernetes Top-Down"
+series_order: 3
+series_path: "fundamentals"
 ---
 
 # Kubernetes Fundamentals - Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?

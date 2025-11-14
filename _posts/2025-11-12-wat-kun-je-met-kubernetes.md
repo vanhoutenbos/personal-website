@@ -12,6 +12,8 @@ lang: nl
 excerpt: "Wat kun je met Kubernetes? Ontdek de mogelijkheden en voordelen van dit krachtige platform voor jouw organisatie."
 tags: [kubernetes, containers, schaalbaarheid, automatisering, cloud native]
 series: "Kubernetes Top-Down"
+series_order: 2
+series_path: "fundamentals"
 ---
 
 # Wat kun je met Kubernetes?

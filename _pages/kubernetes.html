@@ -145,7 +145,7 @@ description: "Van containers tot Kubernetes: welk platform past bij jou? Ontdek 
         </li>
         {% endif %}
         
-        {% assign aro_post = site.posts | where_exp: "post", "post.url contains 'getting-started-openshift'" | where_exp: "post", "post.url contains '-onprem' == false" | first %}
+        {% assign aro_post = site.posts | where_exp: "post", "post.url contains 'getting-started-aro'" | first %}
         {% if aro_post %}
         <li>
           <a href="{{ aro_post.url }}">
