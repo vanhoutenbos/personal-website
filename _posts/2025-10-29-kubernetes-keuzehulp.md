@@ -13,8 +13,6 @@ series_order: 3
 series_path: "fundamentals"
 ---
 
-# Kubernetes Fundamentals - Kubernetes kiezen: AKS, ACA, ACI, OpenShift of zelf hosten?
-
 ## Introductie
 Kubernetes is dé standaard voor container orchestration, maar Azure biedt meerdere smaken: AKS, ACA, ACI en OpenShift. In deze blog help ik je kiezen aan de hand van praktijkervaring, een vergelijkingstabel en concrete tips. 
 
@@ -121,14 +119,12 @@ Mijn persoonlijke voorkeur is AKS vanwege Azure-integratie en community support.
   - ACA voor developers, AKS voor DevOps, OpenShift voor enterprise.
 - **Kan ik makkelijk migreren?**
   - Ja, maar test je exit-strategie en documenteer je setup.
--- **Wat als ik geen Kubernetes-kennis heb?**
+- **Wat als ik geen Kubernetes-kennis heb?**
   - Start met ACA (microservices) of ACI (taken). Simpel web? App Service.
--- **Moet ik direct naar AKS als ik groei verwacht?**
+- **Moet ik direct naar AKS als ik groei verwacht?**
   - Begin licht: bewijs behoefte (CRDs, policies). Migreer pas bij concrete eisen.
--- **Wanneer OpenShift boven AKS?**
+- **Wanneer OpenShift boven AKS?**
   - Governance, ingebouwde security pipelines, multi‑tenant policy centraal.
-
----
 
 ## Series Navigation
 
@@ -139,7 +135,6 @@ Mijn persoonlijke voorkeur is AKS vanwege Azure-integratie en community support.
 [Volgende: {{ page.next.title }}]({{ page.next.url }})
 {% endif %}
 
----
 ## Related articles
 
 {% assign related_posts = site.posts | where: "series", "Kubernetes Top-Down" %}
