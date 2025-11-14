@@ -1,0 +1,80 @@
+---
+layout: default
+title: "Kubernetes"
+permalink: /kubernetes/
+description: "Een overzichtspagina voor alles over Kubernetes: van introductie tot geavanceerde onderwerpen."
+---
+
+<div class="kubernetes-overview">
+  <header>
+    <h1>Kubernetes</h1>
+    <p>Welkom bij de centrale hub voor alles over Kubernetes. Hier vind je een overzicht van alle relevante onderwerpen, gidsen en blogposts.</p>
+  </header>
+
+  <section>
+    <h2>Wat is Kubernetes?</h2>
+    <p>Kubernetes is een orkestratieplatform dat containers (eenheden van software) plant, monitort en herstelt op een cluster van machines. Het zorgt voor:</p>
+    <ul>
+      <li>Declaratieve gewenste toestand (YAML → realiteit)</li>
+      <li>Zelfherstel (restart bij crash, rescheduling bij node failure)</li>
+      <li>Schaling (horizontaal op metrics/events)</li>
+      <li>Netwerk abstractie (Service + Ingress/Route)</li>
+      <li>Extensie via CRDs & Operators</li>
+    </ul>
+    <p><strong>Denk aan Kubernetes als een “autopilot” voor container workloads met een uitbreidbaar ecosysteem.</strong></p>
+    <a href="/blog/2025/10/15/waarom-kubernetes" class="btn">Lees meer: Waarom Kubernetes?</a>
+  </section>
+
+  <section>
+    <h2>Evolutie & Volwassenheidsstadia</h2>
+    <p>Ontdek hoe organisaties groeien in hun gebruik van Kubernetes, van prototypes tot enterprise-grade platforms:</p>
+    <ul>
+      <li><strong>Prototype:</strong> 1–3 containers, focus op iteratie. Volgende stap: ACA/ACI.</li>
+      <li><strong>Early Microservices:</strong> 5–10 services, focus op consistentie. Volgende stap: AKS + Helm.</li>
+      <li><strong>Groei & Governance:</strong> 10–25 services, meerdere teams. Volgende stap: Policies, quotas, security baselines.</li>
+      <li><strong>Enterprise:</strong> >25 services, audits. Volgende stap: OpenShift, Service Mesh.</li>
+      <li><strong>Platform Optimalisatie:</strong> Focus op SLO’s, autoscaling, multi-cluster.</li>
+    </ul>
+    <a href="/blog/2025/10/29/kubernetes-keuzehulp" class="btn">Lees meer: Kubernetes Keuzehulp</a>
+  </section>
+
+  <section>
+    <h2>Kernarchitectuur</h2>
+    <p>Een overzicht van de belangrijkste Kubernetes-componenten:</p>
+    <ul>
+      <li><strong>Pod:</strong> 1 of meer containers samen. Focus: resource limits, restarts.</li>
+      <li><strong>Deployment:</strong> Declaratief rollout & replica management. Focus: strategieën zoals rolling updates.</li>
+      <li><strong>Service:</strong> Stabiel cluster-IP of load balancer. Focus: type (ClusterIP, NodePort, LoadBalancer).</li>
+      <li><strong>Ingress / Route:</strong> HTTP routing + TLS. Focus: controller keuze (NGINX, AGIC).</li>
+      <li><strong>ConfigMap / Secret:</strong> Configuratie & geheimen. Focus: integratie met external secret stores.</li>
+    </ul>
+    <a href="/drafts/networking-kubernetes" class="btn">Lees meer: Networking in Kubernetes</a>
+  </section>
+
+  <section>
+    <h2>Operationele Thema’s</h2>
+    <p>Belangrijke operationele onderwerpen en hun risico’s:</p>
+    <ul>
+      <li><strong>Security:</strong> Least privilege, secrets extern. Risico: credential leakage.</li>
+      <li><strong>Networking:</strong> Netpol + egress beheersing. Risico: segmentatie kostbaar.</li>
+      <li><strong>Observability:</strong> Metrics, tracing, logs. Risico: blind bij incidenten.</li>
+      <li><strong>Governance:</strong> Quotas, labels, cost center. Risico: onvoorspelbare kosten.</li>
+    </ul>
+    <a href="/drafts/security-best-practices" class="btn">Lees meer: Security Best Practices</a>
+  </section>
+
+  <section>
+    <h2>Developer-laag</h2>
+    <p>Welke programmeertalen en tools passen het beste bij Kubernetes?</p>
+    <ul>
+      <li><strong>Go:</strong> Snel startup, lage footprint. Use case: high-performance APIs.</li>
+      <li><strong>.NET:</strong> Productiviteit, tooling. Use case: enterprise services.</li>
+      <li><strong>Python:</strong> Ecosystem (data/ML). Use case: ML inference met scaling.</li>
+    </ul>
+    <a href="/drafts/helm-best-practices" class="btn">Lees meer: Helm Best Practices</a>
+  </section>
+
+  <footer>
+    <p>Blijf op de hoogte van nieuwe artikelen en updates over Kubernetes.</p>
+  </footer>
+</div>

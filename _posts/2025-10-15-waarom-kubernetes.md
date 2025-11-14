@@ -11,6 +11,7 @@ toc: true
 lang: nl
 excerpt: "Wanneer kies je wél of niet voor Kubernetes? Gids over schaalbaarheid, kostenbeheer en soevereiniteit met praktijkvoorbeelden."
 tags: [kubernetes, AKS, OpenShift, containers, schaalbaarheid, kostenbeheer, cloud native, soevereiniteit]
+series: "Kubernetes Top-Down"
 ---
 
 # Waarom kiezen zoveel developers voor Kubernetes?
@@ -94,162 +95,7 @@ Tijdens een sportevenement hadden we normaal gesproken een paar honderd gebruike
 - Bij minuut 80: proactief opschalen naar verwachte piekbelasting
 - Na 30 minuten: geleidelijk afschalen naar normaal niveau
 
-**Het resultaat?** In plaats van 120 minuten op tientallen servers te draaien, draaiden we effectief maar 30 minuten op volle capaciteit. Dat scheelde tienduizenden euro's per jaar aan infrastructuurkosten.
-
-Dit soort **elastische schaalbaarheid** is waar Kubernetes echt in uitblinkt. Volgens onderzoek kunnen organisaties tot 40-50% besparen op infrastructuurkosten door efficiënt gebruik van resources ([plural.sh](https://www.plural.sh/blog/is-kubernetes-worth-it/)).
-
-### Andere business voordelen
-
-- **Hogere beschikbaarheid**: Self-healing en automatische failover reduceren downtime
-- **Snellere time-to-market**: Gestandaardiseerde deployment pipelines versnellen releases
-- **Multi-cloud flexibiliteit**: Geen vendor lock-in betekent betere onderhandelingspositie
-- **Compliance en souvereiniteit**: Meer controle over waar en hoe data wordt verwerkt
-
-## Microsoft en Open Source opties voor Kubernetes
-
-Als je in het Microsoft-ecosysteem werkt, heb je verschillende opties:
-
-### Azure Kubernetes Service (AKS)
-
-**AKS** is de managed Kubernetes-service van Microsoft. De grootste voordelen:
-- Gratis control plane (je betaalt alleen voor worker nodes)
-- Naadloze integratie met Azure-services (Azure AD, Key Vault, Monitor, etc.)
-- Automatische updates en patching
-- Enterprise-grade beveiliging en compliance
-
-AKS is ideaal als je een **pragmatische, managed oplossing** wilt zonder veel operationele overhead. Microsoft neemt het zware beheerwerk uit handen ([Cloud4C](https://www.cloud4c.com/blogs/in-depth-guide-to-azure-kubernetes-service)).
-
-### Red Hat OpenShift
-
-**OpenShift** bouwt voort op Kubernetes met extra enterprise-features:
-- Geïntegreerde CI/CD pipelines
-- Developer-vriendelijke web console
-- Strengere security defaults
-- Commerciële support van Red Hat
-
-OpenShift biedt meer "out-of-the-box" functionaliteit, maar is daardoor ook opinionated en kan restrictiever zijn ([Northflank](https://northflank.com/blog/openshift-vs-kubernetes)). Het is een goede keuze voor organisaties die **maximaal gebruiksgemak** willen met enterprise support.
-
-### Self-managed Kubernetes on-premise
-
-Voor organisaties met strikte **data-souvereiniteit** eisen of specifieke compliance-vereisten kan een self-managed Kubernetes cluster on-premise de voorkeur hebben. Dit geeft maximale controle, maar vereist ook substantieel meer operations-expertise.
-
-## Valkuilen en veelgemaakte fouten
-
-Uit eigen ervaring en observaties, hier zijn de meest voorkomende fouten:
-
-### 1. Stateful applicaties zonder state management
-
-Een klassieker: je bouwt een stateful applicatie (bijvoorbeeld met sessie-informatie in-memory) en vergeet dat Kubernetes je applicatie over meerdere pods distribueert. Het resultaat? Gebruikers loggen in, refreshen de pagina, en zijn soms ingelogd en soms niet – afhankelijk van welke pod hun request behandelt.
-
-**Oplossing**: Maak applicaties stateless, of gebruik gedeelde state (Redis, databases) wanneer state noodzakelijk is.
-
-### 2. Onderschatten van de leercurve
-
-Kubernetes heeft veel concepten: pods, deployments, services, ingress, persistent volumes, config maps, secrets... Voor teams zonder container-ervaring kan dit overweldigend zijn.
-
-**Oplossing**: Begin klein, focus op één concept tegelijk, en gebruik managed services zoals AKS om complexiteit te reduceren ([AltexSoft](https://www.altexsoft.com/blog/kubernetes-pros-cons/)).
-
-### 3. Geen resource limits instellen
-
-Zonder resource limits kan één misbehaving applicatie het hele cluster plat leggen.
-
-**Oplossing**: Stel altijd CPU en memory requests/limits in voor je containers.
-
-### 4. Security als afterthought
-
-Kubernetes heeft veel security-features (RBAC, network policies, pod security standards), maar die moet je wel activeren en configureren.
-
-**Oplossing**: Volg het principle of least privilege, scan images op vulnerabilities, en gebruik tools zoals Azure Policy of OpenShift's security defaults.
-
-## De keerzijde: wanneer Kubernetes te complex is
-
-Laten we eerlijk zijn over de uitdagingen ([Medium](https://medium.com/@goyalarchana17/kubernetes-what-why-how-architecture-with-pros-cons-d0ffd1396df5)):
-
-- **Steile leercurve**: Het duurt maanden om Kubernetes goed te begrijpen
-- **Operationele complexiteit**: Self-managed clusters vereisen dedicated DevOps/SRE teams
-- **Kosten**: Niet alleen infrastructuur, maar ook talent – Kubernetes-experts zijn duur
-- **Overkill voor simpele apps**: Een static website hoeft echt niet op Kubernetes
-
-De **Total Cost of Ownership (TCO)** van Kubernetes gaat verder dan alleen serverkosten. Je moet rekening houden met:
-- Opleidingskosten voor je team
-- Tijd besteed aan platform-onderhoud
-- Licenties (bij commerciële distributies zoals OpenShift)
-- Monitoring en observability tooling
-
-Voor veel organisaties is dit de moeite waard vanwege schaalbaarheid en flexibiliteit. Voor anderen niet.
-
-## Is Kubernetes iets voor jou?
-
-Stel jezelf deze vragen:
-
-1. **Heb je schaalbaarheid nodig** die verder gaat dan een enkele VM?
-2. Is **kostenbeheer** belangrijk (betalen voor wat je gebruikt)?
-3. Wil je **vendor-souvereiniteit** behouden (niet vast zitten aan één cloud)?
-4. Heb je **multi-cloud of hybrid-cloud** strategieën?
-5. Is je team **bereid om te investeren** in training en expertise-opbouw?
-
-Als je 3+ van deze vragen met "ja" beantwoordt, is Kubernetes waarschijnlijk een goede fit.
-
-## Conclusie: Kubernetes is een middel, geen doel
-
-Kubernetes is geen silver bullet. Het is een krachtig platform dat schaalbaarheid, flexibiliteit en kostenbeheer mogelijk maakt – maar alleen als je het juist inzet.
-
-Mijn advies voor beginners: **begin klein**. Experimenteer met een managed service zoals AKS om de operationele last te minimaliseren. Focus op één concept tegelijk. Bouw ervaring op met simpele applicaties voordat je volledige productie-workloads migreert.
-
-Of je nu kiest voor **Azure Kubernetes Service** voor pragmatisch gemak, **OpenShift** voor enterprise-features, of een **self-managed cluster** voor maximale controle – de keuze hangt af van je organisatie's behoeften, capaciteiten en ambities.
-
-**Benieuwd of Kubernetes iets voor jouw organisatie is?** Ik help graag met architectuur-advies, migratie-strategieën of training voor je team. Neem contact op, en we bespreken wat de beste aanpak is voor jouw situatie.
-
-Later zal ik ook diepere dives publiceren over specifieke Kubernetes-onderwerpen – van netwerken tot security, van CI/CD tot monitoring. Stay tuned!
-
----
-
-## Veelgestelde vragen (FAQ)
-
-### Is Kubernetes moeilijk?
-
-Het is conceptueel een flink stapje, maar niet onmogelijk. Er is veel informatie en veel mogelijkheden, maar als je je focust op **één onderwerp per keer** valt de leercurve best mee. Begin met de basics (pods, deployments, services) en bouw van daaruit verder.
-
-### Wat zijn alternatieven voor Kubernetes?
-
-Binnen het Microsoft-ecosysteem zijn **Azure Container Instances (ACI)** en **Azure Container Apps (ACA)** vereenvoudigde alternatieven die onderwater gebruikmaken van Kubernetes-concepten. Voor volledige container orchestration zijn de echte alternatieven **Docker Swarm**, **HashiCorp Nomad** en **Apache Mesos** – hoewel Kubernetes verreweg de meest volwassen en ondersteunde optie is.
-
-### Hoe begin ik met Kubernetes?
-
-Start op [kubernetes.io](https://kubernetes.io) voor officiële documentatie. Voor hands-on learning:
-- Probeer **Minikube** of **kind** voor lokale clusters
-- Gebruik de gratis tier van **Azure Kubernetes Service** voor cloud-experimenten
-- Volg tutorials op YouTube, Udemy of Microsoft Learn
-- Lees blogs en doe-het-zelf guides (zoals deze serie!)
-
-Het mooie van Kubernetes: je kunt met elke programmeertaal aan de slag – Python, C#, PHP, Java, het maakt niet uit. Focus op de concepten, niet op de taal.
-
-### Wat kost Kubernetes?
-
-Dit verschilt enorm per setup:
-- **AKS**: Gratis control plane, betaal alleen worker nodes (vanaf ~€70/maand voor een kleine cluster)
-- **OpenShift**: Commerciële licenties bovenop infrastructuur
-- **Self-managed**: Infrastructuurkosten + aanzienlijke operationele overhead
-
-Vergeet niet de **indirecte kosten**: training, tooling, monitoring, en personeel met Kubernetes-expertise.
-
-### Is AKS of OpenShift beter?
-
-Dat hangt af van je prioriteiten:
-- Kies **AKS** als je wilt integreren met Azure-services, lagere kosten prefereert, en meer flexibiliteit wilt
-- Kies **OpenShift** als je enterprise-features out-of-the-box wilt, commerciële support belangrijk vindt, en een opinionated platform accepteert
-
-Beide zijn uitstekende keuzes voor productie-workloads.
-
----
-
-**Bronnen en verder lezen:**
-- [Kubernetes: What, Why, How & Architecture (Pros & Cons)](https://medium.com/@goyalarchana17/kubernetes-what-why-how-architecture-with-pros-cons-d0ffd1396df5)
-- [Is Kubernetes Worth It? A 2024 Guide to Cost & Benefits](https://www.plural.sh/blog/is-kubernetes-worth-it/)
-- [Comparative Analysis of OpenShift, AKS, GKE](https://medium.com/@kshism/a-comparative-analysis-of-openshift-azure-kubernetes-service-aks-and-google-kubernetes-engine-655b961df1e5)
-- [OpenShift vs Kubernetes: What should you use?](https://northflank.com/blog/openshift-vs-kubernetes)
-- [The Good and the Bad of Kubernetes Container Orchestration](https://www.altexsoft.com/blog/kubernetes-pros-cons/)
-- [Azure Kubernetes Service: In-Depth Guide](https://www.cloud4c.com/blogs/in-depth-guide-to-azure-kubernetes-service)
+**Het resultaat?** In plaats van 120 minuten op tientallen servers te draaien, draaiden we effectief maar 30 minuten op volle capaciteit. Dat scheelde tienduizend
 
 ---
 ## Related articles
@@ -257,9 +103,9 @@ Beide zijn uitstekende keuzes voor productie-workloads.
 {% assign related_posts = site.posts | where_exp: "post", "post != page and post.tags | array_intersect: page.tags | size > 0" %}
 {% if related_posts.size > 0 %}
 <ul>
-	{% for post in related_posts limit:5 %}
-		<li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
-	{% endfor %}
+  {% for post in related_posts limit:5 %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a> <span style="color:#888;font-size:0.9em;">({{ post.date | date: '%Y-%m-%d' }})</span></li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>Geen gerelateerde artikelen gevonden.</p>
