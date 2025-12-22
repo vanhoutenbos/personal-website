@@ -1,6 +1,6 @@
 ---
 title: "Getting Started met Azure Red Hat OpenShift (ARO)"
-date: 2026-01-01
+date: 2026-01-01 06:00:00 +0200
 categories: [Kubernetes, Getting Started, Enterprise]
 layout: single
 permalink: /blog/:year/:month/:day/:title.html

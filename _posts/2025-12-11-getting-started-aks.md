@@ -1,6 +1,6 @@
 ---
 title: "Snel aan de slag met Azure Kubernetes Service (AKS)"
-date: 2025-12-11
+date: 2025-12-11 06:00:00 +0200
 categories: [Kubernetes, Getting Started]
 layout: single
 permalink: /blog/:year/:month/:day/:title.html

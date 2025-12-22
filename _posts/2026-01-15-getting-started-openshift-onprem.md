@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Waarom kiezen voor Kubernetes on-premises met OpenShift?"
-date: 2026-01-15
+date: 2026-01-15 06:00:00 +0200
 categories: [Kubernetes, On-Premises]
 permalink: /blog/:year/:month/:day/:title.html
 description: "Ontdek waarom on-premises Kubernetes met OpenShift een slimme keuze kan zijn voor jouw organisatie."

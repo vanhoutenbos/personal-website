@@ -1,6 +1,6 @@
 ---
 title: "Containers zonder Kubernetes: Azure Container Apps (ACA) & Container Instances (ACI)"
-date: 2025-11-27
+date: 2025-11-27 06:00:00 +0200
 categories: [Containers, Getting Started]
 layout: single
 permalink: /blog/:year/:month/:day/:title.html
