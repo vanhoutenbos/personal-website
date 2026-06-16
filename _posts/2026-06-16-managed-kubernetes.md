@@ -53,6 +53,7 @@ De naam "Kubernetes as a Service" wekt de indruk dat je een kant-en-klare servic
 
 Namespaces zijn je eerste isolatielaag. Maar een chaos van willekeurig benoemde namespaces maakt kostenallocatie, auditlogging en toegangscontrole onmogelijk.
 
+```yaml
 # Conventie: <team>-<omgeving>
 namespace: payments-prod
 namespace: payments-staging
@@ -67,6 +68,7 @@ metadata:
     environment: production
     cost-center: "CC-4421"
     owner: "team-payments@bedrijf.nl"
+```
 
 Zodra je namespaces en labels strak definieert, kun je policies, quota en rapportage hier direct op laten aansluiten.
 
@@ -74,6 +76,7 @@ Zodra je namespaces en labels strak definieert, kun je policies, quota en rappor
 
 Zonder quota kan één team — of één foutieve deployment — je cluster leegtrekken.
 
+```yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -87,7 +90,7 @@ spec:
     limits.memory: 32Gi
     pods: "50"
     persistentvolumeclaims: "10"
-
+---
 apiVersion: v1
 kind: LimitRange
 metadata:
@@ -102,6 +105,7 @@ spec:
       cpu: "100m"
       memory: 128Mi
     type: Container
+```
 
 Deze combinatie voorkomt dat teams zonder expliciete afspraken per ongeluk te veel resources claimen. Het maakt gedrag voorspelbaar en helpt direct bij kostenbeheersing.
 
@@ -109,6 +113,7 @@ Deze combinatie voorkomt dat teams zonder expliciete afspraken per ongeluk te ve
 
 Standaard kan elke pod met elke andere pod communiceren.
 
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -119,33 +124,30 @@ spec:
   policyTypes:
   - Ingress
   - Egress
+```
 
 Daarna voeg je expliciete allow-regels toe voor wat wel mag. Daarmee dwing je af dat communicatie bewust ontworpen is in plaats van toevallig ontstaan.
 
 4. Pod Security (PSS / OPA / Kyverno)
 
+```yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: payments-prod
   labels:
     pod-security.kubernetes.io/enforce: restricted
+```
 
 Voor complexere regels kun je OPA Gatekeeper of Kyverno gebruiken. Daarmee kun je bijvoorbeeld root containers blokkeren, privileged pods weigeren en securitystandaarden afdwingen op schaal.
 
 5. Image scanning
 
-- task: CmdLine@2
-  displayName: 'Scan container image met Trivy'
-
 Scannen alleen is niet genoeg; je wilt dat kritieke findings ook echt deployment blokkeren. Zo voorkom je dat kwetsbaarheden stilletjes naar productie doorschuiven.
 
 6. Secrets management
 
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-
-Werk liever met een externe secrets store dan met plaintext in Git of half-versleutelde waarden in manifests. Dat maakt rotatie, audit en toegangsbeheer veel beter beheersbaar.
+Werk liever met een externe secrets store dan met plaintext in Git of half-versleutelde waarden in manifests. Dat maakt rotatie, audit en toegangsbeheer veel beter beheersbaar. Een andere optie is SealedSecrets.
 
 7. Audit logging
 
