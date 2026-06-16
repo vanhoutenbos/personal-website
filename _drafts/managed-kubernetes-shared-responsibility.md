@@ -1,8 +1,3 @@
-kun je dan een plain text versie zonder markdown opmaak kunnen tonen in de chat? in een code blok eventueel die niet stopt
-
-Ja — hieronder staat de versie als plain text in één codeblok, zodat je het direct kunt copy-pasten zonder dat de opmaak tussendoor afbreekt.
-
-```text
 ---
 title: "Managed Kubernetes (KaaS): Wat lost het wél en niet voor je op?"
 date: 2026-06-16 06:00:00 +0200
@@ -207,4 +202,3 @@ Managed Kubernetes is een sterke basis, maar geen compleet platform.
 Beheerd cluster + governance = productierijp platform.
 
 Zonder governance heb je een krachtige motor zonder remmen.
-```
