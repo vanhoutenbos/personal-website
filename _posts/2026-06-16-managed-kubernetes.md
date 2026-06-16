@@ -47,8 +47,6 @@ De harde waarheid: de onderkant van deze tabel — alles met ❌ — is precies 
 
 De naam "Kubernetes as a Service" wekt de indruk dat je een kant-en-klare service afneemt, zoals Gmail of Slack. Dat klopt voor de control plane, maar niet voor je platform.
 
-Een beter mentaal model: je huurt een high-performance motorblok. De fabrikant garandeert dat het blok draait. Maar jij bouwt er nog steeds een auto omheen: carrosserie, banden, stuur, remmen, veiligheidsgordels en APK. Die onderdelen zijn jouw verantwoordelijkheid — en ze bepalen of je veilig aankomt.
-
 ## De 8 governance bouwblokken die jij moet bouwen
 
 1. Namespaces + labelconventies
