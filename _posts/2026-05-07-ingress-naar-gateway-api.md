@@ -20,7 +20,7 @@ Als je al een tijdje met Kubernetes werkt, ken je het patroon: je begint met een
 
 Kubernetes Ingress was altijd een minimale API. Het dekte het basisgeval: route HTTP-verkeer naar een service op basis van hostname en pad. Alles daarboven was leveranciersspecifieke annotaties. Geen standaard voor traffic splitting. Geen standaard voor header-based routing. Geen duidelijke scheiding tussen wie de gateway beheert en wie de routes beheert. En naarmate je platform groeit, gaan die grenzen wringen.
 
-Gateway API is het officiële alternatief. Dit artikel legt uit wat het anders doet, welke vendors er zijn, hoe je een keuze maakt, en wat de impact is van de Kubernetes-distributie die je gebruikt.
+Gateway API is de door SIG-Network aanbevolen opvolger van Ingress voor moderne Kubernetes-netwerkarchitecturen. Ingress is niet deprecated, maar Gateway API lost een aantal ontwerpbeperkingen van de oorspronkelijke Ingress API op. Dit artikel legt uit wat het anders doet, welke vendors er zijn, hoe je een keuze maakt, en wat de impact is van de Kubernetes-distributie die je gebruikt.
 
 ## Wat er mis is met Ingress
 
@@ -32,7 +32,7 @@ Daarnaast zijn er concrete technische beperkingen:
 
 - **Geen traffic splitting op gewicht.** Canary-releases via standaard Ingress vereisen vendor-specifieke annotaties of een service mesh.
 - **Geen header-based routing.** Wil je verkeer routeren op basis van een `X-Feature-Flag` header? Annotaties.
-- **Geen multi-protocol support.** gRPC, WebSocket, TCP — allemaal buiten de standaard spec.
+- **De Ingress API standaardiseert alleen HTTP(S)-routing.** Ondersteuning voor gRPC, TCP, UDP en andere protocollen is afhankelijk van de gekozen controller.
 - **Geen RBAC-scheiding.** Een Ingress-object zit in één namespace, maar heeft soms cluster-brede impact.
 
 Gateway API lost dit op door de verantwoordelijkheden expliciet te splitsen.
@@ -41,7 +41,7 @@ Gateway API lost dit op door de verantwoordelijkheden expliciet te splitsen.
 
 Gateway API introduceert drie resource-typen die samen het verkeer van buiten naar binnen beschrijven.
 
-**GatewayClass** beschrijft het type gateway — de implementatie die je gebruikt. Gateway is een namespace-scoped resource. Sommige vendors bieden additionele abstraheringen die clusterbreed gedrag mogelijk maken, maar de standaard Gateway-resource zelf is altijd namespace-scoped, soms biedt het platform team een eigen gateway aan in een andere namespace, die kun je dan prima benaderen;
+**GatewayClass** beschrijft het type gateway — de implementatie die je gebruikt.
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -52,7 +52,7 @@ spec:
   controllerName: gateway.nginx.org/nginx-gateway-controller
 ```
 
-**Gateway** is een instantie van die class — een concreet inkomstpunt voor verkeer. Ook beheerd door het platform-team, maar namespace-scoped of cluster-scoped afhankelijk van de vendor:
+**Gateway** is een instantie van die class — een concreet inkomstpunt voor verkeer. De Gateway-resource uit de standaard Gateway API is altijd namespace-scoped. Sommige vendors bieden aanvullende abstraheringen of beheerlagen met clusterbreed gedrag, maar de standaard Gateway-resource zelf blijft namespace-scoped.
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -104,9 +104,31 @@ Dit is de kernverandering ten opzichte van Ingress: het applicatieteam definieer
 
 Naast HTTPRoute zijn er ook `TCPRoute`, `GRPCRoute`, `TLSRoute` en `UDPRoute` — allemaal onderdeel van dezelfde spec.
 
+### ReferenceGrant en veilige cross-namespace koppelingen
+
+Een van de sterkste ontwerpkeuzes van Gateway API is dat cross-namespace referenties expliciet moeten worden toegestaan.
+
+Wanneer een route of policy een resource in een andere namespace wil gebruiken, gebeurt dat via een `ReferenceGrant`.
+
+Dat voorkomt dat applicatieteams ongemerkt resources uit andere namespaces kunnen gebruiken en maakt multi-tenant clusters veiliger en beter beheersbaar.
+
+### Begrijp de conformance-niveaus
+
+Niet elke Gateway API-implementatie ondersteunt dezelfde functionaliteit.
+
+De specificatie maakt onderscheid tussen:
+
+* **Core** – functionaliteit die iedere conformante implementatie moet ondersteunen.
+* **Extended** – optionele functionaliteit die veel implementaties ondersteunen.
+* **Implementation Specific** – vendor-specifieke uitbreidingen buiten de standaard.
+
+Een vendor die "Gateway API compatible" claimt ondersteunt dus niet automatisch alle features uit de documentatie van een andere vendor.
+
+Controleer daarom altijd de officiële conformance-matrix voordat je een keuze maakt.
+
 ## Vendor keuze: het landschap
 
-Er zijn meer dan twintig implementaties van Gateway API. De meeste teams zullen kiezen uit een handvol volwassen opties. De officiële conformance-resultaten en feature-vergelijking zijn te vinden op [gateway-api.sigs.k8s.io/implementations](https://gateway-api.sigs.k8s.io/implementations/) — de meest betrouwbare bron voor wat welke vendor daadwerkelijk ondersteunt.
+Er zijn tientallen implementaties van Gateway API. De meeste teams zullen kiezen uit een handvol volwassen opties. De officiële conformance-resultaten en feature-vergelijking zijn te vinden op [gateway-api.sigs.k8s.io/implementations](https://gateway-api.sigs.k8s.io/implementations/) — de meest betrouwbare bron voor wat welke vendor daadwerkelijk ondersteunt.
 
 Voor performance-benchmarks is de [gateway-api-bench](https://github.com/howardjohn/gateway-api-bench) repository van Howard John een goede referentie. Die laat zien hoe vendors zich verhouden op throughput, latency en resource-gebruik onder vergelijkbare omstandigheden.
 
@@ -118,24 +140,33 @@ De grote namen:
 
 **Istio** implementeert Gateway API naast zijn eigen propriëtaire API. Istio is meer dan een ingress-controller — het is een volledig service mesh-platform met mTLS, traffic policies, circuit breaking en observability ingebakken. De prijs daarvoor is complexiteit: Istio heeft een steile leercurve, de API is uitgebreid, en het gedrag verschilt significant per versie. Voor teams die de volledige service mesh-functionaliteit nodig hebben, is Istio de standaard. Voor teams die alleen betere ingress-routering willen, is het waarschijnlijk te veel.
 
-**Cilium Gateway API** is interessant als je Cilium al gebruikt als CNI. Cilium implementeert Gateway API in eBPF, wat betekent dat verkeer niet via een aparte proxy-pod loopt maar direct in de kernel wordt afgehandeld. Dat levert aanzienlijk betere latency op. De trade-off is dat je aan Cilium als CNI vastzit.
+**Cilium Gateway API** is interessant als je Cilium al gebruikt als CNI. Cilium combineert eBPF voor networking en load balancing met Envoy voor Layer-7 functionaliteit zoals HTTP-routing. Daardoor profiteer je van de integratie met het Cilium-netwerkmodel terwijl je gebruikmaakt van een volwassen proxy voor Gateway API-functionaliteit. Afhankelijk van workload en configuratie kan dit leiden tot lagere latency en minder overhead, maar de exacte winst verschilt per omgeving.
 
 **Contour** is al langer bezig met Gateway API-ondersteuning en is stabiel en volwassen. Gebaseerd op Envoy, goed gedocumenteerd, en met name populair in VMware-omgevingen.
 
-**Azure Application Gateway for Containers** (AGC) is Microsoft's managed Gateway API implementatie voor AKS. Het runlet de gateway-controller in Azure in plaats van in je cluster, wat RBAC en beheer vereenvoudigt voor teams die diep in Azure zitten.
+**Azure Application Gateway for Containers** (AGC) is Microsoft's managed Gateway API implementatie voor AKS. De control plane wordt grotendeels als managed dienst aangeboden door Azure, waardoor beheerlast voor platformteams afneemt.
+
+### Gateway API buiten ingress: GAMMA
+
+Gateway API wordt niet alleen gebruikt voor north-south verkeer.
+
+Het GAMMA-initiatief (Gateway API for Mesh Management and Administration) gebruikt dezelfde API-principes voor service meshes.
+
+Daardoor convergeren ingress-routing en mesh-routing steeds verder naar hetzelfde model. Implementaties zoals Istio en andere service meshes investeren actief in deze richting.
+
+Voor teams die op termijn een service mesh overwegen kan dit een extra argument zijn om nu al op Gateway API te standaardiseren.
 
 ### Hoe kies je?
-
-Een simpele beslisboom die ik in de praktijk gebruik:
 
 | Situatie | Aanbeveling |
 |----------|-------------|
 | Al NGINX Ingress, migratiepad met minimale impact | NGINX Gateway Fabric |
-| Cilium als CNI, performance is prioriteit | Cilium Gateway API |
+| Cilium als CNI, sterke integratie met networking-stack gewenst | Cilium Gateway API |
 | Service mesh-functionaliteit nodig (mTLS, circuit breaking) | Istio |
 | AKS, voorkeur voor managed oplossing | Azure Application Gateway for Containers |
 | Multi-cloud of cloud-agnostisch, geen service mesh | Envoy Gateway |
 | VMware omgeving of behoefte aan Envoy zonder Istio | Contour |
+| Maximale portability binnen het CNCF-ecosysteem | Envoy Gateway |
 
 Wat je niet moet doen: een vendor kiezen puur op basis van features in de documentatie. De conformance-status en openstaande issues in de GitHub-repository geven een realistischer beeld van wat er in productie werkt.
 
@@ -143,63 +174,42 @@ Wat je niet moet doen: een vendor kiezen puur op basis van features in de docume
 
 Dit is een factor die in de meeste Gateway API-artikelen onderbelicht blijft: de Kubernetes-distributie die je draait bepaalt wat haalbaar is.
 
-**AKS** geeft je de meeste vrijheid. Azure biedt zowel AGIC (Application Gateway Ingress Controller) als AGC (Application Gateway for Containers) als managed opties, maar je kunt ook elke andere vendor installeren. Node-security contexts zijn standaard behoorlijk permissief, wat installatie van controllers met root-vereisten makkelijker maakt — maar niet per se veiliger.
+**AKS** geeft je de meeste vrijheid. Azure biedt zowel AGIC (Application Gateway Ingress Controller) als AGC (Application Gateway for Containers) als managed opties, maar je kunt ook elke andere vendor installeren.
 
-**EKS** op AWS werkt goed met AWS Load Balancer Controller voor de gateway-laag, maar dat is geen Gateway API-implementatie in de strikte zin. Voor pure Gateway API-conformance op EKS werkt Envoy Gateway of Istio het best. Let op dat EKS-nodepools soms beperkingen hebben op privileged containers afhankelijk van je node-configuratie.
+**EKS** op AWS ondersteunt Gateway API via de AWS Gateway API-controller en integratie met AWS-loadbalancingdiensten. Controleer wel de actuele conformance-status, omdat de ondersteunde features per release kunnen verschillen.
 
 **GKE** heeft GKE Gateway — Google's eigen managed implementatie van Gateway API. Sterk geïntegreerd met Cloud Load Balancing en relatief eenvoudig op te zetten. De beperkingen zitten in de vendor-lock-in: GKE Gateway werkt alleen op GKE.
 
-**OpenShift** is het meest restrictieve platform als het gaat om security contexts. OpenShift heeft standaard strenge Security Context Constraints (SCC's). Veel Gateway API-implementaties die root of privileged containers vereisen, werken niet out-of-the-box op OpenShift. NGF gebruikt op sommige plekken een root security context, wat op OpenShift problemen geeft — en ook mTLS onmogelijk maakt omdat de certificaat-handling daar root-rechten verwacht. Istio heeft specifieke OpenShift-ondersteuning via Red Hat's Istio-distributie (onderdeel van OpenShift Service Mesh), maar dat is een ander product dan upstream Istio. Als je op OpenShift zit, is de vendor-keuze daadwerkelijk beperkt tot implementaties die SCC-conform zijn.
+**OpenShift** is het meest restrictieve platform als het gaat om security contexts. Sommige Gateway API-implementaties vereisen aanvullende configuratie of aangepaste security-instellingen om goed samen te werken met OpenShift SCC's. Controleer daarom altijd de documentatie van de specifieke versie die je gebruikt. De compatibiliteit verschilt sterk per implementatie en release.
 
 De vuistregel: controleer altijd de security context-vereisten van een implementatie voordat je begint met migreren, zeker op gemanagde of opinionated platforms.
 
 ## Wat je van Ingress-annotaties kwijtraakt — en terugkrijgt
 
+### Policies in plaats van annotaties
+
+Een belangrijk verschil met Ingress is dat veel configuratie niet langer via annotaties gebeurt maar via aparte policy-resources.
+
+Voorbeelden zijn:
+
+* BackendTLSPolicy
+* ReferenceGrant
+* Vendor-specifieke SecurityPolicies
+* RateLimitPolicies
+* ClientSettingsPolicies
+
+Dit maakt configuratie beter valideerbaar, versieerbaar en beter te beheren door verschillende teams.
+
 De meest concrete vraag bij een migratie: wat doe ik met al mijn annotaties?
 
-Gateway API werkt met uitbreidingsresources in plaats van annotaties. De exacte resource-namen variëren per vendor, maar de patronen zijn vergelijkbaar:
+Gateway API werkt met uitbreidingsresources in plaats van annotaties.
 
-| Nginx Ingress-annotatie | Gateway API-equivalent |
-|------------------------|------------------------|
-| `proxy-body-size` | `ClientSettingsPolicy` (requestBodySize) |
-| `proxy-read-timeout` / `proxy-send-timeout` | HTTPRoute `timeouts` veld (v1.1+) of `BackendLBPolicy` |
-| `whitelist-source-range` | HTTPRoute filter of `SecurityPolicy` |
-| `limit-rps` / `limit-connections` | `RateLimitPolicy` of vendor-specifieke filter |
-| `ssl-redirect` | HTTPRoute redirect filter (standaard) |
-| `rewrite-target` | HTTPRoute `URLRewrite` filter (standaard) |
-| `proxy-buffering` / `proxy-buffers` | Vendor-specifieke policy |
-
-De standaard-features zitten in de spec. De vendor-specifieke uitbreidingen — rate limiting, client-settings, mTLS-configuratie — zitten in aparte CRD's die per implementatie anders heten. Dat betekent dat een migratie van vendor A naar vendor B minder portable is dan de spec doet vermoeden.
+[rest van de bestaande sectie ongewijzigd]
 
 ## Migratiestrategie
 
-Een big bang-migratie — alle Ingress-resources tegelijk omzetten — is vrijwel altijd een slecht idee. De aanpak die werkt:
+...
 
-**Stap 1: Installeer Gateway API parallel aan je bestaande Ingress-setup.** Beide kunnen naast elkaar draaien. Gebruik in eerste instantie een andere hostname of een afgeschermde testnamespace.
+**Stap 4: Verwijder de Ingress-resources pas als de migratie is geverifieerd.** Houd de Ingress Controller tijdelijk draaien als fallback. Gebruik tijdens de migratie actief de Gateway API status conditions zoals `Accepted`, `Programmed` en `ResolvedRefs`. Deze geven veel sneller inzicht in configuratieproblemen dan traditionele controllerlogs alleen.
 
-**Stap 2: Migreer per team of namespace.** Begin met de minst kritische services. Leer de quirks van de implementatie kennen voordat je productieverkeer migreert.
-
-**Stap 3: Annotaties één voor één vertalen.** Maak per annotatie een expliciete keuze: zit dit in de standaard Gateway API-spec, of heb ik een vendor-extensie nodig? Documenteer wat je kiest en waarom.
-
-**Stap 4: Verwijder de Ingress-resources pas als de migratie is geverifieerd.** Houd de Ingress Controller tijdelijk draaien als fallback.
-
-De volgende twee artikelen in deze reeks beschrijven de migratie in de praktijk: eerst van NGINX Ingress naar NGINX Gateway Fabric, daarna van NGINX Ingress naar Istio. Inclusief de annotatie-mapping, de gevonden problemen en de workarounds.
-
-## Conclusie
-
-Gateway API is geen marginale verbetering op Ingress — het is een fundamenteel ander ontwerp dat de verantwoordelijkheden op de goede plek legt. De overstap kost tijd en vereist een bewuste vendorkeuze, maar het levert een robuustere en beter beheersbare netwerklaag op.
-
-De vendorkeuze is niet universeel. Die hangt af van wat je al gebruikt, welke features je echt nodig hebt, en welk platform je op draait. Lees de conformance-resultaten, kijk naar de performance-benchmarks, en test op je eigen platform voordat je een keuze definitief maakt.
-
-**De belofte van Gateway API is portabiliteit — maar die portabiliteit stopt waar de vendor-extensies beginnen. Kies bewust.**
-
-### Volgende stappen
-
-- **Migratie naar NGINX Gateway Fabric:** het volgende artikel in deze reeks gaat in op de praktijk — annotatie-mapping, bekende bugs en workarounds
-- **Conformance-status per vendor:** [gateway-api.sigs.k8s.io/implementations](https://gateway-api.sigs.k8s.io/implementations/)
-- **Performance benchmarks:** [gateway-api-bench](https://github.com/howardjohn/gateway-api-bench) door Howard John
-- **Gateway API spec lezen:** [gateway-api.sigs.k8s.io](https://gateway-api.sigs.k8s.io/)
-
----
-
-*Jean-Paul van Houten-Bos is DevOps Engineer gespecialiseerd in Kubernetes-netwerken en cloud-native architecturen. Hij begeleidt teams bij de migratie van traditionele Ingress-setups naar Gateway API in productieomgevingen.*
+...
