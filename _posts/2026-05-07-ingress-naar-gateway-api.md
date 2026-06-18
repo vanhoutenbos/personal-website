@@ -4,7 +4,7 @@ date: 2026-05-07 06:00:00 +0200
 categories: [Kubernetes, Networking]
 layout: single
 permalink: /blog/:year/:month/:day/:title.html
-description: "Kubernetes Ingress heeft zijn grenzen bereikt. Gateway API is de opvolger — maar welke vendor kies je, en hoe pakt die keuze uit op AKS, EKS of OpenShift? Dit artikel legt het uit."
+description: "Kubernetes Ingress heeft zijn grenzen bereikt. Gateway API is het alternatief — maar welke vendor kies je, en hoe pakt die keuze uit op AKS, EKS of OpenShift? Dit artikel legt het uit."
 image: /assets/img/post-default.svg
 image_alt: "Van Kubernetes Ingress naar Gateway API: architectuur en vendorkeuze"
 tags: [Kubernetes, Networking, Gateway API, Ingress, NGINX, Istio, AKS, EKS, OpenShift]
@@ -20,11 +20,11 @@ Als je al een tijdje met Kubernetes werkt, ken je het patroon: je begint met een
 
 Kubernetes Ingress was altijd een minimale API. Het dekte het basisgeval: route HTTP-verkeer naar een service op basis van hostname en pad. Alles daarboven was leveranciersspecifieke annotaties. Geen standaard voor traffic splitting. Geen standaard voor header-based routing. Geen duidelijke scheiding tussen wie de gateway beheert en wie de routes beheert. En naarmate je platform groeit, gaan die grenzen wringen.
 
-Gateway API is de officiële opvolger. Dit artikel legt uit wat het anders doet, welke vendors er zijn, hoe je een keuze maakt, en wat de impact is van de Kubernetes-distributie die je gebruikt.
+Gateway API is het officiële alternatief. Dit artikel legt uit wat het anders doet, welke vendors er zijn, hoe je een keuze maakt, en wat de impact is van de Kubernetes-distributie die je gebruikt.
 
 ## Wat er mis is met Ingress
 
-Ingress heeft een fundamenteel ontwerpprobleem: het is een API met één object voor verantwoordelijkheden die eigenlijk bij drie partijen horen.
+Ingress heeft een fundamenteel ontwerpprobleem voor managed kubernetes: het is een API met één object voor verantwoordelijkheden die eigenlijk bij drie partijen horen.
 
 Een platform-engineer wil bepalen welke load balancer er wordt ingezet en hoe die is geconfigureerd. Een security-engineer wil TLS-terminatie en access policies beheren. Een applicatieteam wil routes definiëren voor hun eigen services. In het Ingress-model doen ze dat allemaal in hetzelfde object, of erger: het platform-team zet annotaties op het Ingress-object van het applicatieteam.
 
@@ -41,7 +41,7 @@ Gateway API lost dit op door de verantwoordelijkheden expliciet te splitsen.
 
 Gateway API introduceert drie resource-typen die samen het verkeer van buiten naar binnen beschrijven.
 
-**GatewayClass** beschrijft het type gateway — de implementatie die je gebruikt. Dit is een cluster-scoped resource die door het platform-team wordt beheerd:
+**GatewayClass** beschrijft het type gateway — de implementatie die je gebruikt. Gateway is een namespace-scoped resource. Sommige vendors bieden additionele abstraheringen die clusterbreed gedrag mogelijk maken, maar de standaard Gateway-resource zelf is altijd namespace-scoped, soms biedt het platform team een eigen gateway aan in een andere namespace, die kun je dan prima benaderen;
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
