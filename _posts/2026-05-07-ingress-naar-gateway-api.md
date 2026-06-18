@@ -188,17 +188,24 @@ De vuistregel: controleer altijd de security context-vereisten van een implement
 
 ### Policies in plaats van annotaties
 
-Een belangrijk verschil met Ingress is dat veel configuratie niet langer via annotaties gebeurt maar via aparte policy-resources.
+Een belangrijk verschil met Ingress is dat veel configuratie niet langer via annotaties gebeurt maar via aparte resources.
 
-Voorbeelden zijn:
+Sommige daarvan zijn onderdeel van de Gateway API-standaard, zoals:
 
-* BackendTLSPolicy
 * ReferenceGrant
-* Vendor-specifieke SecurityPolicies
-* RateLimitPolicies
-* ClientSettingsPolicies
+* BackendTLSPolicy
 
-Dit maakt configuratie beter valideerbaar, versieerbaar en beter te beheren door verschillende teams.
+Daarnaast leveren veel implementaties eigen policy-resources voor zaken zoals:
+
+* Rate limiting
+* Client instellingen
+* Security policies
+* WAF-configuratie
+* mTLS-instellingen
+
+De namen en mogelijkheden van deze resources verschillen per vendor.
+
+Dat maakt configuratie beter valideerbaar, versieerbaar en beter te beheren door verschillende teams, maar betekent ook dat volledige portabiliteit ophoudt zodra je vendor-specifieke uitbreidingen gebruikt.
 
 De meest concrete vraag bij een migratie: wat doe ik met al mijn annotaties?
 
