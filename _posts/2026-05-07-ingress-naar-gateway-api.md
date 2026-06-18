@@ -211,12 +211,18 @@ De meest concrete vraag bij een migratie: wat doe ik met al mijn annotaties?
 
 Gateway API werkt met uitbreidingsresources in plaats van annotaties.
 
-[rest van de bestaande sectie ongewijzigd]
-
 ## Migratiestrategie
 
-...
+Een big bang-migratie — alle Ingress-resources tegelijk omzetten — is vrijwel altijd een slecht idee. De aanpak die werkt:
 
-**Stap 4: Verwijder de Ingress-resources pas als de migratie is geverifieerd.** Houd de Ingress Controller tijdelijk draaien als fallback. Gebruik tijdens de migratie actief de Gateway API status conditions zoals `Accepted`, `Programmed` en `ResolvedRefs`. Deze geven veel sneller inzicht in configuratieproblemen dan traditionele controllerlogs alleen.
+**Stap 1: Installeer Gateway API parallel aan je bestaande Ingress-setup.** Beide kunnen naast elkaar draaien. Gebruik in eerste instantie een andere hostname of een afgeschermde testnamespace.
 
-...
+**Stap 2: Migreer per team of namespace.** Begin met de minst kritische services. Leer de quirks van de implementatie kennen voordat je productieverkeer migreert.
+
+**Stap 3: Annotaties één voor één vertalen.** Maak per annotatie een expliciete keuze: zit dit in de standaard Gateway API-spec, of heb ik een vendor-extensie nodig? Documenteer wat je kiest en waarom.
+
+**Stap 4: Verwijder de Ingress-resources pas als de migratie is geverifieerd.** Houd de Ingress Controller tijdelijk draaien als fallback.
+
+Gebruik tijdens de migratie actief de Gateway API status conditions zoals `Accepted`, `Programmed` en `ResolvedRefs`. Deze geven vaak sneller inzicht in configuratieproblemen dan controllerlogs alleen.
+
+De volgende twee artikelen in deze reeks beschrijven de migratie in de praktijk: eerst van NGINX Ingress naar NGINX Gateway Fabric, daarna van NGINX Ingress naar Istio. Inclusief de annotatie-mapping, de gevonden problemen en de workarounds.
