@@ -22,6 +22,30 @@ Dit artikel beschrijft de migratie zoals ik hem in de praktijk heb doorgemaakt. 
 
 Voor context: het vorige artikel in deze reeks beschrijft de architectuur van Gateway API en hoe je een vendor kiest. Dit artikel gaat ervan uit dat je die keuze al hebt gemaakt.
 
+> **Getest op**
+>
+> De voorbeelden en bevindingen in dit artikel zijn gebaseerd op:
+>
+> - OpenShift Container Platform 4.19 (laatste beschikbare versie in mei 2026)
+> - NGINX Gateway Fabric 2.5.2
+> - Gateway API CRD's geleverd door OpenShift (v1.2.1)
+>
+> Controleer altijd de release notes van zowel OpenShift als NGINX Gateway Fabric. Functionaliteit, compatibiliteit en ondersteunde Gateway API-features veranderen snel.
+
+## Eerst een belangrijke nuance
+
+Voordat we beginnen is het belangrijk onderscheid te maken tussen drie projecten die vaak door elkaar worden gehaald:
+
+| Project | Beschrijving |
+|----------|-------------|
+| ingress-nginx | Community Ingress Controller van het Kubernetes project |
+| NGINX Ingress Controller | De commerciële en community variant van F5 NGINX |
+| NGINX Gateway Fabric | F5's Gateway API implementatie |
+
+NGINX Gateway Fabric is geen nieuwe versie van ingress-nginx. Het is een aparte codebase die vanaf het begin rond Gateway API is ontworpen.
+
+De migratie in dit artikel gaat van NGINX Ingress Controller naar NGINX Gateway Fabric.
+
 ## De annotaties die je moet vertalen
 
 Veel NGINX Ingress-configuratie zit in annotaties. Gateway API werkt niet met annotaties — het werkt met aparte policy-resources en met velden in de route-spec zelf. De mapping is niet altijd één op één.
@@ -49,7 +73,9 @@ spec:
     maxSize: "10m"
 ```
 
-Dit werkt — als je een NGF-versie gebruikt zonder de namespace-bug. Meer daarover verderop.
+Dit werkt via een NGF-specifieke extensie. ClientSettingsPolicy is geen onderdeel van de Gateway API-standaard en maakt je configuratie daardoor minder portabel tussen implementaties.
+
+Daarnaast is er in NGF 2.5.2 een bekende bug rond namespace-afhandeling. Meer daarover verderop.
 
 ### Timeouts
 
@@ -84,7 +110,9 @@ spec:
       port: 8080
 ```
 
-Het `timeouts`-veld is onderdeel van de standaard Gateway API-spec en is dus niet NGF-specifiek. Controleer wel of de versie van de spec die je gebruikt dit ondersteunt — het is toegevoegd in v1.1.
+Het `timeouts`-veld is onderdeel van de Gateway API-specificatie en dus niet NGF-specifiek.
+
+Controleer wel of zowel de gebruikte Gateway API-versie als jouw implementatie deze feature ondersteunen. Ondersteuning binnen de specificatie betekent niet automatisch dat iedere Gateway API-controller dezelfde functionaliteit implementeert.
 
 ### IP whitelisting
 
@@ -120,7 +148,11 @@ NGF is een jonger project dan NGINX Ingress. Dat betekent dat je buiten de gebaa
 
 ### ClientSettingsPolicy en meerdere namespaces
 
-De `ClientSettingsPolicy` koppelt aan een HTTPRoute via een `targetRef`. Het probleem: NGF 2.5.2 houdt bij die koppeling niet altijd rekening met de namespace als unieke identifier. Als je dezelfde route-naam gebruikt in meerdere namespaces — wat bij grote platforms gebruikelijk is — kan de policy aan de verkeerde route worden gekoppeld, of helemaal niet worden toegepast.
+Tijdens onze tests op NGF 2.5.2 zagen we gedrag waarbij namespace-isolatie niet altijd correct werd meegenomen bij het verwerken van ClientSettingsPolicies.
+
+Wanneer meerdere HTTPRoutes dezelfde naam gebruiken in verschillende namespaces kan de koppeling tussen policy en route onvoorspelbaar gedrag vertonen.
+
+Dit gedrag is inmiddels vastgelegd in GitHub issue #5333.
 
 Concreet: een `ClientSettingsPolicy` in namespace `payments-prod` die koppelt aan een HTTPRoute met de naam `api` werkt niet betrouwbaar als er in namespace `orders-prod` ook een HTTPRoute `api` bestaat.
 
@@ -138,7 +170,7 @@ spec:
     value: "client_max_body_size 10m;"
 ```
 
-**Mijn aanbeveling: gebruik SnippetsFilter niet.** De reden is principieel: SnippetsFilter geeft je directe toegang tot de NGINX-configuratielaag, inclusief alle mogelijkheden die daar bij horen. Server snippets in NGINX Ingress hebben een bekende geschiedenis van CVE's waarbij een verkeerd geconfigureerde snippet een security-bypass mogelijk maakt. NGF's SnippetsFilter heeft dezelfde risicoprofielen. Je ruilt een buggy beleidsresource in voor een krachtigere maar risicovollere workaround.
+**Mijn aanbeveling: gebruik SnippetsFilter alleen als tijdelijke workaround.** De reden is principieel: SnippetsFilter geeft je directe toegang tot de NGINX-configuratielaag, inclusief alle mogelijkheden die daar bij horen. Server snippets in NGINX Ingress hebben een bekende geschiedenis van CVE's waarbij een verkeerd geconfigureerde snippet een security-bypass mogelijk maakt. NGF's SnippetsFilter heeft dezelfde risicoprofielen. Je ruilt een buggy beleidsresource in voor een krachtigere maar risicovollere workaround die governance en security reviews vereist.
 
 Als je de ClientSettingsPolicy-bug raakt, zijn de betere opties:
 
@@ -146,13 +178,17 @@ Als je de ClientSettingsPolicy-bug raakt, zijn de betere opties:
 2. **Stel body-limieten in op de service zelf**, via de applicatieconfiguratie of een sidecar.
 3. **Wacht op een NGF-versie die de bug heeft opgelost** voordat je deze feature in productie zet.
 
-### Security context en mTLS
+### OpenShift en Gateway API-versies
 
-NGF gebruikt op sommige plekken een root security context. Dat heeft een directe consequentie: mTLS is in NGF niet mogelijk op de manier waarop je dat bij Istio of Envoy Gateway zou verwachten.
+Tijdens deze migratie liepen we tegen een versieverschil aan tussen OpenShift en NGINX Gateway Fabric.
 
-mTLS vereist dat de proxy de client-certificaten kan lezen en valideren. De manier waarop NGF's root context is ingericht, staat dat niet toe op het niveau van de data plane. Als mTLS een vereiste is — en in enterprise-omgevingen is dat steeds vaker het geval — is NGF de verkeerde keuze.
+NGF 2.5.x conformeert met Gateway API 1.5, terwijl OpenShift 4.19 momenteel Gateway API 1.2.1 levert.
 
-Op OpenShift maakt de root security context de installatie überhaupt problematisch. OpenShift's Security Context Constraints (SCC's) blokkeren standaard containers die root vereisen. NGF uitrollen op OpenShift vereist custom SCC-configuratie, en zelfs dan zijn er beperkingen in wat de controller kan doen.
+Dat betekent dat sommige Gateway API-features die door NGF worden ondersteund niet automatisch beschikbaar zijn op OpenShift.
+
+Voor organisaties die gebruik willen maken van nieuwere Gateway API-functionaliteit is het verstandig vooraf te controleren welke Gateway API-versie door het platform geleverd wordt.
+
+De compatibiliteit tussen controller, CRD-versie en Kubernetes-distributie blijkt in de praktijk minstens zo belangrijk als de featurelijst van de controller zelf.
 
 ## De migratieaanpak in de praktijk
 
@@ -171,9 +207,31 @@ Die derde categorie zijn je risico's. Los die op voordat je begint met migreren,
 
 **Documenteer de afwijkingen.** Elke plek waar je een annotatie niet één op één hebt kunnen vertalen, verdient documentatie. Dat maakt toekomstige upgrades en eventuele vendor-switches begrijpelijk.
 
+## Een ander operationeel model
+
+Een belangrijk verschil met NGINX Ingress Controller is dat een Gateway niet alleen configuratie beschrijft.
+
+Bij NGINX Gateway Fabric leidt een Gateway-resource tot het uitrollen van een eigen dataplane.
+
+```text
+GatewayClass
+    ↓
+Gateway
+    ↓
+NGINX Deployment
+    ↓
+Service / LoadBalancer
+```
+
+Daardoor wordt een Gateway meer een infrastructuurcomponent dan een verzameling routes.
+
+Voor platformteams is dat vaak een voordeel: de eigenaar van de Gateway bepaalt de levenscyclus van de dataplane, terwijl applicatieteams alleen HTTPRoutes beheren.
+
 ## Is NGF de juiste keuze voor jou?
 
-NGF is een logische stap als je NGINX Ingress gebruikt en een incrementele migratie wilt. De config-filosofie is vertrouwd, de debugging-tooling ook, en de overstap is kleiner dan naar een volledig nieuwe vendor.
+NGF is de meest logische migratiestap voor organisaties die vandaag al NGINX Ingress Controller gebruiken. De configuratiefilosofie is vertrouwd, de debugging-tooling ook, en de overstap is kleiner dan naar een volledig nieuwe vendor.
+
+Dat betekent echter niet automatisch dat er volledige feature-pariteit bestaat tussen NGINX Ingress Controller en NGINX Gateway Fabric.
 
 Maar NGF is op dit moment een project dat nog groeit. De bugs die ik beschrijf zijn reële beperkingen — niet theoretisch, maar praktisch aangelopen in productieomgevingen. Als je gebruik maakt van features zoals mTLS, zware multi-namespace beleidsconfiguratie of strenge security context-vereisten, is NGF nu waarschijnlijk niet de juiste keuze.
 
