@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "IaaS, CaaS, KaaS en PaaS: Kubernetes service models uitgelegd"
+title: "IaaS, CaaS, KaaS en PaaS: service delivery modellen voor Kubernetes uitgelegd"
 date: 2026-06-09 06:00:00 +0200
 categories: [Kubernetes, Cloud, Platform Engineering]
 permalink: /blog/:year/:month/:day/:title.html
@@ -14,12 +14,13 @@ description: >
   welk model bij jouw situatie past.
 lang: nl
 ---
+# IaaS, CaaS, KaaS en PaaS: service delivery modellen voor Kubernetes uitgelegd
 
-# IaaS, CaaS, KaaS en PaaS: Kubernetes service models uitgelegd
+Als je begint met Kubernetes, stuit je al snel op een wirwar van afkortingen: AKS, ACI, ACA, OpenShift, on-prem, managed, serverless. Wat de meeste vergelijkingen overslaan is het onderliggende model: **hoeveel beheert de provider of het platformteam, en hoeveel doe jij zelf?**
 
-Als je begint met Kubernetes, stuit je al snel op een wirwar van afkortingen: AKS, ACI, ACA, OpenShift, on-prem, managed, serverless. Wat de meeste vergelijkingen overslaan is het onderliggende model: **hoeveel beheert de provider, en hoeveel doe jij zelf?**
+Deze vraag wordt beschreven met **service delivery modellen** — een term die breder is dan alleen cloud. De oorsprong ligt bij de drie NIST-modellen (IaaS, PaaS, SaaS), maar de container-wereld heeft daar CaaS en KaaS aan toegevoegd. En het model is net zo van toepassing op een intern platformteam dat Kubernetes levert als op een cloudprovider die dat doet.
 
-Dat onderscheid valt uiteen in vier veel voorkomende modellen. Ze volgen een spectrum van maximale controle naar maximale abstractie.
+Dat onderscheid valt uiteen in vier modellen. Ze volgen een spectrum van maximale controle naar maximale abstractie.
 
 ---
 
@@ -47,6 +48,7 @@ De cloudprovider levert rekenkracht, netwerk en opslag. Wat je daarboven bouwt, 
 - Kubernetes installeren via `kubeadm` op Azure VMs of AWS EC2
 - K3s op edge hardware of bare metal
 - Rancher op zelfbeheerde nodes
+- OpenShift on-premises — als jouw team het cluster zelf installeert en beheert op eigen hardware
 
 **Wat jij beheert:**
 
@@ -68,10 +70,9 @@ De cloudprovider levert rekenkracht, netwerk en opslag. Wat je daarboven bouwt, 
 - Je hebt geen team voor cluster lifecycle management
 - Snelheid van levering is belangrijker dan controle
 
-
-
-> Verdieping: *Komend artikel — Vanilla Kubernetes: kubeadm, K3s en Rancher* 
-> Verdieping: *Komend Artikel - Kubernetes Open Shift On-Premise*
+> Verdieping: *Komend artikel — Vanilla Kubernetes: kubeadm, K3s en Rancher*
+>
+> Verdieping: [Waarom kiezen voor Kubernetes on-premises met OpenShift?](https://www.jeanpaulvanhouten.nl/blog/2026/01/15/getting-started-openshift-onprem.html)
 
 ---
 
@@ -104,6 +105,8 @@ CaaS is de meest minimale containeroplossing. Je zegt "draai deze container" en 
 | Schaalbaarheid | Handmatig, 1 container | Auto-scaling, 0 tot veel |
 | Networking | Basis | Ingress, load balancing |
 | Kubernetes zichtbaar | ❌ | ❌ (draait er wel onder) |
+
+ACA is de bovengrens van CaaS: het biedt meer dan pure container execution (revisions, traffic splitting, event-driven scaling via KEDA), maar je hebt als gebruiker geen toegang tot de Kubernetes API of het platform eronder. Dat houdt het in het CaaS-model, zij het aan de rijkere kant.
 
 **Wanneer kiezen:**
 - Korte geïsoleerde taken of CI/CD runners
@@ -158,6 +161,7 @@ Maar let op: **managed Kubernetes is geen managed platform.** De provider beheer
 - Strikte on-premises vereisten
 
 > Verdieping: [Snel aan de slag met AKS](https://www.jeanpaulvanhouten.nl/blog/2025/12/11/getting-started-aks.html)
+>
 > Verdieping: [Managed Kubernetes — wat lost het wél en niet voor je op?](https://www.jeanpaulvanhouten.nl/blog/2026/06/16/managed-kubernetes.html)
 
 ---
@@ -174,7 +178,7 @@ In de Kubernetes-wereld zie je dit model op twee manieren:
 De provider levert een compleet, opinionated Kubernetes-platform inclusief ingebouwde security, CI/CD-tooling en compliance-features.
 
 **Voorbeelden:**
-- OpenShift on-premises (beheerd door eigen ops-team)
+- Azure Red Hat OpenShift (ARO) — managed OpenShift in Azure
 - Google Cloud Run on GKE
 - Intern Shared Platform (SP) model — zoals bij overheidsorganisaties waarbij één platformteam het cluster beheert en dev-teams als tenant opereren
 
@@ -201,13 +205,13 @@ Dit is het model dat veel overheids- en enterprise-organisaties hanteren.
 - Enterprise governance en compliance vereist
 - Geen eigen ops-team voor cluster lifecycle
 - Multi-tenant isolatie out-of-the-box nodig
-- Data residency of on-premises vereisten (on-prem OpenShift)
+- Je wilt een gecurateerd platform consumeren in plaats van zelf bouwen
 
 **Wanneer niet:**
 - Je hebt volledige flexibiliteit nodig in clusterinrichting
 - Je wilt eigen keuzes maken in netwerking, ingress of node-configuratie
 
-> Verdieping: [Waarom kiezen voor Kubernetes on-premises met OpenShift?](https://www.jeanpaulvanhouten.nl/blog/2026/01/15/getting-started-openshift-onprem.html)
+> Verdieping: [Snel aan de slag met Azure Red Hat OpenShift (ARO)](https://www.jeanpaulvanhouten.nl/blog/2026/01/01/getting-started-aro.html)
 
 ---
 
@@ -221,7 +225,7 @@ Dit is het model dat veel overheids- en enterprise-organisaties hanteren.
 | **Governance / policies** | Zelf | Minimaal | Zelf | Opgelegd |
 | **Vrijheid in tooling** | Maximaal | Beperkt | Hoog | Laag |
 | **Operationele overhead** | Zeer hoog | Laag | Medium | Laag |
-| **Azure voorbeeld** | VMs + kubeadm | ACI / ACA | AKS / ARO | OpenShift on-prem / SP |
+| **Azure voorbeeld** | VMs + kubeadm / OpenShift on-prem | ACI / ACA | AKS / ARO | ARO managed / SP |
 
 ---
 
@@ -265,5 +269,6 @@ Ga niet direct naar het zwaarste model. Bewijs eerst de behoefte, dan de complex
 - [Containers zonder Kubernetes: ACA & ACI](https://www.jeanpaulvanhouten.nl/blog/2025/11/27/getting-started-aca-aci.html) — CaaS in de praktijk
 - [Snel aan de slag met AKS](https://www.jeanpaulvanhouten.nl/blog/2025/12/11/getting-started-aks.html) — KaaS quickstart
 - [Managed Kubernetes: wat lost het wél en niet voor je op?](https://www.jeanpaulvanhouten.nl/blog/2026/06/16/managed-kubernetes.html) — KaaS governance diepgang
-- [Waarom kiezen voor Kubernetes on-premises met OpenShift?](https://www.jeanpaulvanhouten.nl/blog/2026/01/15/getting-started-openshift-onprem.html) — PaaS / IaaS on-prem
+- [Waarom kiezen voor Kubernetes on-premises met OpenShift?](https://www.jeanpaulvanhouten.nl/blog/2026/01/15/getting-started-openshift-onprem.html) — IaaS on-prem
+- [Snel aan de slag met Azure Red Hat OpenShift (ARO)](https://www.jeanpaulvanhouten.nl/blog/2026/01/01/getting-started-aro.html) — PaaS managed platform
 - [Kubernetes Keuzehulp](https://www.jeanpaulvanhouten.nl/kubernetes/keuzehulp/2025/10/29/kubernetes-keuzehulp.html) — platform vergelijking en beslismatrix
