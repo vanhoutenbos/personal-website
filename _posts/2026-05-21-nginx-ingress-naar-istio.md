@@ -16,25 +16,28 @@ lang: nl
 
 # NGINX Ingress naar Istio: kracht, complexiteit en wanneer het de moeite waard is
 
-Istio is niet alleen een Gateway API-implementatie. Het is een service mesh — een volledig platform voor netwerkcommunicatie tussen services, met mTLS, traffic policies, circuit breaking, retry-logica en distributed tracing ingebakken. Als je van NGINX Ingress naar Istio migreert, stap je niet alleen over naar een andere ingress-controller. Je voegt een complete infrastructuurlaag toe.
+Istio is meer dan een Gateway API-implementatie. Je kunt het ook als service mesh gebruiken, met mTLS, traffic policies, circuit breaking, retries en distributed tracing voor verkeer tussen services. Migreer je van NGINX Ingress naar Istio, dan verander je dus niet alleen van ingress-controller. Je haalt er een extra infrastructuurlaag bij.
 
-Dat is precies waarom Istio voor veel teams complexer aanvoelt dan verwacht. De documentatie is uitgebreid, de API heeft veel resources, en het gedrag verschilt aanzienlijk per versie. Istio bestaat al een tijdje en heeft een aantal architectonische overhauls gehad — van de oorspronkelijke Mixer-architectuur naar Istiod, naar de huidige ambient mesh-modus. Wat je leest in een artikel van twee jaar geleden klopt mogelijk niet meer voor de versie die je nu installeert.
+Daar zit ook de reden dat Istio voor veel teams ingewikkelder is dan verwacht. Er is veel documentatie, je krijgt met meer resources te maken en gedrag kan per versie verschillen. Istio heeft bovendien een paar grote architectuurveranderingen doorgemaakt: van Mixer naar Istiod en later naar ambient mesh. Een artikel van twee jaar geleden beschrijft dus niet automatisch de versie die je nu gebruikt.
 
-Dit artikel beschrijft de migratie van dezelfde NGINX Ingress-annotaties als het vorige artikel, maar nu met Istio als doel. En het beschrijft eerlijk wanneer die keuze de moeite waard is — en wanneer niet.
+In dit artikel vertaal ik dezelfde NGINX Ingress-annotaties als in het vorige artikel naar Istio. Daarna kijk ik wanneer die overstap iets oplevert en wanneer je beter een andere keuze maakt.
 
 ## Istio en Gateway API: twee API-smaken
 
-Istio ondersteunt Gateway API naast zijn eigen propriëtaire API. Dat geeft je een keuze:
+Istio ondersteunt de standaard Gateway API en heeft daarnaast eigen API's. Je kunt dus kiezen:
 
-**Propriëtaire Istio API** gebruikt `Gateway` en `VirtualService` van de `networking.istio.io`-groep. Dit is de oudere aanpak, goed gedocumenteerd, met veel voorbeelden online. Nadeel: het koppelt je volledig aan Istio.
+**De Istio API** gebruikt `Gateway` en `VirtualService` uit de `networking.istio.io`-groep. Dit is de oudere aanpak. Je vindt er veel documentatie en voorbeelden voor, maar je configuratie is wel aan Istio gekoppeld.
 
-**Gateway API** gebruikt de standaard `gateway.networking.k8s.io`-resources. Istio is een van de meest conformante Gateway API-implementaties — het ondersteunt bijna de volledige spec, inclusief uitbreidingen. Dit is de richting die Istio aanraadt voor nieuwe installaties.
+**Gateway API** gebruikt de standaardresources uit `gateway.networking.k8s.io`. Istio ondersteunt een groot deel van de specificatie, inclusief uitbreidingen. Voor nieuwe installaties raadt Istio deze richting aan.
 
-In dit artikel gebruik ik de Gateway API-aanpak. De Istio-extensies die aanvullende functionaliteit bieden, gebruik ik via aparte policy-resources.
+In dit artikel gebruik ik Gateway API. Waar extra Istio-functionaliteit nodig is, voeg ik aparte policy-resources toe.
 
 ## Installatie en basis Gateway-configuratie
 
-Installeer Istio via de officiële Helm chart met Gateway API-ondersteuning:
+{: .notice--info}
+> **Geteste omgeving:** deze voorbeelden zijn gebaseerd op OpenShift met Red Hat OpenShift Service Mesh 1.22, beheerd via de OpenShift Service Mesh Operator. De Helm-commando's hieronder zijn een generiek upstream-Istio-voorbeeld en beschrijven niet hoe Istio in deze OpenShift-omgeving is geïnstalleerd.
+
+Ter vergelijking: zo ziet een generieke upstream-Istio-installatie met Gateway API-ondersteuning via Helm eruit:
 
 ```bash
 helm repo add istio https://istio-release.storage.googleapis.com/charts
@@ -95,7 +98,7 @@ spec:
 
 ## De annotaties vertalen
 
-Met dezelfde annotaties als uitgangspunt als in het vorige artikel, dit is hoe ze in Istio worden opgelost.
+Ik gebruik dezelfde annotaties als in het vorige artikel. Zo vertaal je ze naar Istio.
 
 ### Body size limiet
 
@@ -104,7 +107,7 @@ Met dezelfde annotaties als uitgangspunt als in het vorige artikel, dit is hoe z
 nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 ```
 
-In Istio gebruik je een `EnvoyFilter` om de upstream body-limiet te configureren, of je configureert het op de Envoy proxy via een `WasmPlugin`. Maar de meest pragmatische aanpak voor alleen body-size is het instellen op de applicatielaag, of via een `VirtualService` policy als je de propriëtaire API gebruikt.
+Voor deze limiet kun je in Istio een `EnvoyFilter` gebruiken, of de Envoy-proxy configureren met een `WasmPlugin`. Heb je alleen een limiet op de requestgrootte nodig, dan is configuratie in de applicatie vaak eenvoudiger. Gebruik je de Istio API, dan kun je ook een `VirtualService`-policy overwegen.
 
 Via de Istio-propriëtaire API (als je die nog gebruikt naast Gateway API):
 
@@ -134,7 +137,7 @@ spec:
           max_request_bytes: 10485760  # 10MB
 ```
 
-`EnvoyFilter` is krachtig — het geeft je directe toegang tot de Envoy-configuratie — maar het is ook foutgevoelig en versie-afhankelijk. De structuur van een `EnvoyFilter` kan breken bij een Istio-upgrade als de interne Envoy-configuratie wijzigt. Gebruik het spaarzaam en documenteer goed welke versie er werd gebruikt toen je het schreef.
+Met `EnvoyFilter` pas je de Envoy-configuratie rechtstreeks aan. Dat geeft veel controle, maar maakt je configuratie ook gevoelig voor fouten en versieverschillen. Verandert de interne Envoy-configuratie bij een Istio-upgrade, dan kan je filter stukgaan. Gebruik `EnvoyFilter` daarom alleen als het nodig is en noteer bij welke versie je de configuratie hebt gemaakt.
 
 ### Timeouts
 
@@ -169,7 +172,7 @@ spec:
       port: 8080
 ```
 
-Dit is identiek aan de NGF-aanpak — het `timeouts`-veld is onderdeel van de standaard spec. Hier zie je de kracht van de standaard: dezelfde HTTPRoute-configuratie werkt op beide implementaties.
+Dit werkt hetzelfde als bij NGF: het veld `timeouts` hoort bij de standaard. Daardoor kun je dezelfde `HTTPRoute` op beide implementaties gebruiken.
 
 ### IP whitelisting
 
@@ -178,7 +181,7 @@ Dit is identiek aan de NGF-aanpak — het `timeouts`-veld is onderdeel van de st
 nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,192.168.1.0/24"
 ```
 
-In Istio gebruik je `AuthorizationPolicy` voor access control op basis van source-IP. Dit is een van de plaatsen waar Istio aanzienlijk krachtiger is dan een standalone ingress-controller:
+In Istio kun je `AuthorizationPolicy` gebruiken om toegang op basis van het bron-IP te regelen. Dat biedt meer mogelijkheden dan een losse ingress-controller:
 
 ```yaml
 apiVersion: security.istio.io/v1beta1
@@ -199,7 +202,7 @@ spec:
         - "192.168.1.0/24"
 ```
 
-Let op: `AuthorizationPolicy` werkt op basis van de IP die Envoy ziet. Als er een load balancer voor zit, moet je `X-Forwarded-For` correct doorgeven en de `numTrustedProxies` instellen in de mesh-configuratie — anders evalueert Istio het IP van de load balancer in plaats van de client.
+Let op: `AuthorizationPolicy` kijkt naar het IP-adres dat Envoy ziet. Staat er een load balancer vóór Envoy, dan ziet Envoy mogelijk het adres van die load balancer in plaats van dat van de client. In dat geval moet je `X-Forwarded-For` goed doorgeven en `numTrustedProxies` instellen in de mesh-configuratie.
 
 ### Rate limiting
 
@@ -209,7 +212,7 @@ nginx.ingress.kubernetes.io/limit-rps: "10"
 nginx.ingress.kubernetes.io/limit-connections: "5"
 ```
 
-Istio heeft geen ingebouwde rate limiting in de standaard Gateway API-resources. Rate limiting gaat via een externe service — typisch via de Envoy Rate Limit Service of via een WASM-plugin:
+De standaard Gateway API-resources van Istio hebben geen ingebouwde rate limiting. Je hebt hiervoor een externe service nodig, bijvoorbeeld de Envoy Rate Limit Service, of een WASM-plugin:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -245,13 +248,13 @@ spec:
             transport_api_version: V3
 ```
 
-Dit vereist een aparte rate limit service naast Istio. Voor de meeste teams is dat te zwaar voor iets wat NGINX Ingress met een enkele annotatie afhandelde. De eerlijke conclusie: als rate limiting op ingress-niveau een kernvereiste is, dan is Istio niet de meest efficiënte oplossing. Overweeg dan rate limiting op een API gateway-laag die beter is uitgerust voor dat patroon.
+Hiervoor moet je dus naast Istio ook een rate limit service beheren. Dat kan veel werk zijn voor een functie waarvoor NGINX Ingress één annotatie nodig had. Is rate limiting op ingress-niveau een harde eis, dan is Istio misschien niet de handigste oplossing. Kijk dan ook naar een API gateway die dit patroon standaard ondersteunt.
 
 ## Wat Istio toevoegt boven een ingress-controller
 
-Tot nu toe leken de migratie-uitdagingen groot en de voordelen klein. Dat is een vertekend beeld, want het echte voordeel van Istio zit niet in de annotatie-vervanging — het zit in wat er daarna mogelijk is.
+Tot nu toe klinkt de migratie misschien als veel werk voor weinig winst. Dat beeld is niet compleet. De waarde van Istio zit niet alleen in het vervangen van annotaties, maar ook in de mogelijkheden die je daarna kunt inzetten.
 
-**mTLS tussen services** is met Istio triviaal. Zodra de sidecar-proxies actief zijn, kun je mTLS cluster-breed afdwingen:
+**mTLS tussen services** kun je met Istio afdwingen zodra de sidecar-proxies actief zijn:
 
 ```yaml
 apiVersion: security.istio.io/v1beta1
@@ -264,9 +267,9 @@ spec:
     mode: STRICT
 ```
 
-Eén resource, en al het service-to-service verkeer in het cluster is versleuteld en geverifieerd. Geen aanpassingen aan applicaties. Dat is een beveiligingsmaatregel die je met een standalone ingress-controller niet krijgt.
+Met één resource versleutel en verifieer je zo het service-to-service-verkeer in het cluster. Je hoeft daarvoor de applicaties niet aan te passen. Een standalone ingress-controller biedt dit niet.
 
-**Traffic splitting** voor canary releases:
+**Traffic splitting** helpt je bijvoorbeeld bij canary releases:
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -288,7 +291,7 @@ spec:
       weight: 10
 ```
 
-**Circuit breaking en retry-beleid** via `DestinationRule`:
+Met `DestinationRule` stel je **circuit breaking en retry-beleid** in:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -309,50 +312,50 @@ spec:
       baseEjectionTime: 30s
 ```
 
-Dit zijn capabilities die je met NGINX Ingress alleen krijgt via extra tooling of een service mesh bovenop de ingress-controller.
+Met NGINX Ingress heb je voor dit soort mogelijkheden extra tooling of een service mesh nodig.
 
 ## De eerlijke keerzijde: complexiteit en versieverschillen
 
-Istio is complex. Niet op een manier die je kunt omzeilen door betere documentatie te lezen — het is intrinsiek complex omdat het veel meer doet dan een ingress-controller.
+Istio is complex. Dat los je niet alleen op door de documentatie beter te lezen. Istio doet nu eenmaal meer dan een ingress-controller.
 
-Er zijn meer resource-types om te kennen: `Gateway`, `VirtualService`, `DestinationRule`, `AuthorizationPolicy`, `PeerAuthentication`, `ServiceEntry`, `Sidecar`, `EnvoyFilter`. Elk heeft zijn eigen gedragsregels en interacties. Teams die gewend zijn aan NGINX Ingress-annotaties onderschatten systematisch hoeveel Istio vraagt om goed te begrijpen.
+Je krijgt ook meer resource-types om te leren kennen: `Gateway`, `VirtualService`, `DestinationRule`, `AuthorizationPolicy`, `PeerAuthentication`, `ServiceEntry`, `Sidecar` en `EnvoyFilter`. Ze hebben elk hun eigen regels en werken op elkaar in. Wie gewend is aan NGINX Ingress-annotaties onderschat al snel hoeveel je van Istio moet begrijpen.
 
-Een extra complicatie is dat Istio een langere historische ontwikkeling heeft gehad en op meerdere punten architectureel is veranderd. De Mixer-component die in oudere versies traffiek-policies afhandelde is volledig vervangen. Ambient mesh — waarbij geen sidecar-proxies meer nodig zijn — is in recente versies beschikbaar maar nog niet overal productierijp. Wat werkt in Istio 1.16 werkt soms anders in Istio 1.21. Artikelen en StackOverflow-antwoorden zijn zonder versie-context weinig waard.
+Daar komt bij dat Istio in de loop van de tijd op meerdere punten is veranderd. Mixer, dat in oudere versies traffic policies afhandelde, is vervangen. Ambient mesh werkt zonder sidecar-proxies. Het is in recente versies beschikbaar, maar nog niet overal productierijp. Ook kan iets wat werkt in Istio 1.16 anders werken in Istio 1.21. Een artikel of Stack Overflow-antwoord is daarom pas bruikbaar als je weet voor welke versie het is geschreven.
 
-Dat leidt tot een praktisch probleem: als je Istio wilt upgraden, moet je goed begrijpen welke API-changes er zijn. `EnvoyFilter`-configs die afhankelijk zijn van interne Envoy-structuren breken regelmatig bij een major upgrade. Het is niet ongebruikelijk dat een team na een upgrade uren kwijt is aan het debuggen van een `EnvoyFilter` die de upgrade niet heeft overleefd.
+Dat merk je vooral bij upgrades. Je moet weten welke API-wijzigingen eraan komen. Een `EnvoyFilter` die leunt op interne Envoy-structuren kan bij een grote upgrade breken. Dan ben je na de upgrade misschien uren aan het zoeken naar de reden dat je filter niet meer werkt.
 
 ## Wanneer is Istio de juiste keuze — en wanneer niet?
 
-Istio is de juiste keuze als je **meer dan een ingress-controller nodig hebt**. Als de behoeften van je organisatie zijn:
+Istio past wanneer je **meer nodig hebt dan een ingress-controller**. Denk bijvoorbeeld aan:
 
 - mTLS cluster-breed, zonder applicatiecode aan te passen
 - Fijnmazige traffic policies per service (canary, circuit breaking, retries)
 - Centraal beheer van service-to-service autorisatie
 - Distributed tracing geïntegreerd in de netwerklaag
 
-Dan is Istio een serieuze kandidaat. De complexiteit is dan gerechtvaardigd.
+In dat geval is Istio een serieuze kandidaat. De extra complexiteit kan dan de moeite waard zijn.
 
-Istio is **niet** de juiste keuze als je alleen betere ingress-routering wilt. Als je vandaag NGINX Ingress gebruikt met een handvol annotaties voor timeouts en body-limieten, levert Istio onevenredig veel complexiteit voor de functionaliteit die je daadwerkelijk gebruikt. NGF of Envoy Gateway zijn dan efficiëntere keuzes.
+Wil je alleen betere ingress-routering, dan is Istio waarschijnlijk niet de juiste keuze. Gebruik je nu NGINX Ingress met een paar annotaties voor timeouts en body-limieten, dan haal je met Istio veel complexiteit binnen voor weinig extra functionaliteit. NGF of Envoy Gateway kan dan een eenvoudigere keuze zijn.
 
-Een patroon dat ik in de praktijk heb gezien: sommige teams combineren vendors per laag. Ze gebruiken NGF of Envoy Gateway voor de ingresslaag — simpel, snel, goed begrepen — en voegen Istio toe als sidecar mesh voor service-to-service policies. Dat is een verdedigbare architectuurkeuze. Je hebt dan twee tools in plaats van één, maar elk met een duidelijk afgebakende verantwoordelijkheid.
+Een patroon dat ik in de praktijk heb gezien: teams combineren soms vendors per laag. Ze gebruiken NGF of Envoy Gateway voor inkomend verkeer en zetten Istio daarnaast als sidecar mesh in voor policies tussen services. Dat is een verdedigbare keuze. Je beheert dan twee tools in plaats van één, maar elke tool heeft een duidelijke verantwoordelijkheid.
 
-Wat per team anders kan zijn:
+De afweging verschilt per team:
 
-- Teams met een sterk platform-team dat Istio begrijpt en beheert, ervaren de complexiteit anders dan teams die het zelf moeten uitzoeken
-- Teams in een regulated environment waar mTLS en audit logging harde vereisten zijn, hebben meer aan Istio dan teams waar dat niet speelt
-- Teams die al Envoy kennen (via andere tools) hebben een kortere leercurve naar Istio dan teams die er koud in stappen
+- Een platformteam dat Istio kent en beheert, kan de complexiteit beter opvangen dan een team dat alles zelf moet uitzoeken.
+- In een gereguleerde omgeving kunnen mTLS en audit logging harde eisen zijn. Dan kan Istio meer waarde bieden.
+- Ken je Envoy al uit andere tools, dan is de stap naar Istio waarschijnlijk kleiner.
 
-Er is geen universeel juist antwoord. De architectuurblog aan het begin van deze reeks beschrijft de beslisboom — maar de input voor die beslissing verschilt per organisatie.
+Er is geen keuze die voor iedereen klopt. De architectuurblog aan het begin van deze reeks helpt je de opties af te wegen. Welke optie past, hangt af van je organisatie en je eisen.
 
 ## Conclusie
 
-De migratie van NGINX Ingress naar Istio is meer werk dan naar NGF, en de annotatie-vertaling is minder direct. Maar Istio geeft je ook fundamenteel meer: mTLS, traffic management en service-level policies op een manier die geen standalone ingress-controller biedt.
+De overstap van NGINX Ingress naar Istio kost meer werk dan de overstap naar NGF. Ook vertaal je annotaties minder rechtstreeks. Daar staat tegenover dat Istio meer kan bieden, zoals mTLS, traffic management en policies voor verkeer tussen services.
 
-De keuze hangt niet af van welke tool technisch het best is. Die hangt af van wat jouw teams aankunnen, welke features je daadwerkelijk nodig hebt, en of je de complexiteit van Istio kunt dragen — operationeel en organisatorisch.
+De beste tool is niet automatisch de beste keuze voor jouw team. Kijk naar wat je nodig hebt, wat je team kan beheren en of je de extra complexiteit kunt dragen.
 
-Een goed platform-team dat Istio kent en beheert, verandert de ervaring van applicatieteams enorm. Zonder dat fundament wordt Istio een bron van frustratie in plaats van een enabler.
+Een platformteam dat Istio goed beheert, maakt voor applicatieteams een groot verschil. Zonder dat fundament kan Istio vooral extra werk opleveren.
 
-**Istio geeft je een weg — maar je moet wel de navigatie begrijpen voor je gaat rijden.**
+Istio kan veel, maar je moet wel weten welke onderdelen je nodig hebt. Begin dus met je eisen, niet met het aantal features.
 
 ### Volgende stappen
 
